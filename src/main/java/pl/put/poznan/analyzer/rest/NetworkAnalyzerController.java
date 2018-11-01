@@ -1,4 +1,5 @@
 package pl.put.poznan.analyzer.rest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +15,21 @@ public class NetworkAnalyzerController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public String get(@PathVariable String text,
-                              @RequestParam(value="transforms", defaultValue="upper,escape") String[] transforms) {
+                      @RequestParam(value = "transforms", defaultValue = "upper,escape") String[] transforms) {
         // log the parameters
         logger.debug(text);
         logger.debug(Arrays.toString(transforms));
-        return null;
+        return "sadasdasd";
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public String post(@PathVariable String text,
-                      @RequestBody String[] transforms) {
+                       @RequestBody String[] transforms) {
         // log the parameters
         logger.debug(text);
         logger.debug(Arrays.toString(transforms));
         return null;
     }
-
 
 
 }
