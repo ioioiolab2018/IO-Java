@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@SpringBootApplication(scanBasePackages = {"pl.put.poznan.analyzer.rest"})
+@SpringBootApplication
 public class NetworkAnalyzerApplication {
 
     public static void main(String[] args) {
