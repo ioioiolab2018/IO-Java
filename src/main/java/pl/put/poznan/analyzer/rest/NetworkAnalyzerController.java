@@ -19,7 +19,7 @@ public class NetworkAnalyzerController {
         // log the parameters
         logger.debug(text);
         logger.debug(Arrays.toString(transforms));
-        return null;
+        return "sadasdasd";
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
