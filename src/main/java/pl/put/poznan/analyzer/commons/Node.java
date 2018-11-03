@@ -15,7 +15,7 @@ public class Node {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private NodeType nodeType;
 
     @Column
     @OneToMany(mappedBy = "from")
@@ -43,12 +43,12 @@ public class Node {
         this.name = name;
     }
 
-    public Type getType() {
-        return type;
+    public NodeType getNodeType() {
+        return nodeType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setNodeType(NodeType nodeType) {
+        this.nodeType = nodeType;
     }
 
     public List<Connection> getOutgoing() {
@@ -72,7 +72,7 @@ public class Node {
         return "Node{" +
                 "id: " + id +
                 ", name: '" + name + '\'' +
-                ", type: " + type +
+                ", nodeType: " + nodeType +
                 ", outgoing: " + outgoing +
                 ", incoming: " + incoming +
                 '}';

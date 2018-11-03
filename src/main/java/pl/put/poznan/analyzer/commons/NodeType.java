@@ -1,5 +1,5 @@
 package pl.put.poznan.analyzer.commons;
 
-public enum Type {
+public enum NodeType {
     ENTRY, EXIT, REGULAR
 }
