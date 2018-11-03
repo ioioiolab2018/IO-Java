@@ -5,6 +5,6 @@ package pl.put.poznan.analyzer.logic;
  */
 public class NetworkAnalyzer {
 
-    public NetworkAnalyzer(){
+    public NetworkAnalyzer() {
     }
 }
