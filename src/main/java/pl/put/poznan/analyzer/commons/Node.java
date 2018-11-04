@@ -2,6 +2,7 @@ package pl.put.poznan.analyzer.commons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Node {
@@ -28,8 +29,8 @@ public class Node {
         this.id = id;
         this.name = name;
         this.nodeType = nodeType;
-        this.outgoing = new ArrayList<Connection>();
-        this.incoming = new ArrayList<Connection>();
+        this.outgoing = new ArrayList<>();
+        this.incoming = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -70,6 +71,19 @@ public class Node {
 
     public void setIncoming(List<Connection> incoming) {
         this.incoming = incoming;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(id, node.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, nodeType, outgoing, incoming);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Data {
         if (nodeType == NodeType.REGULAR) {
             nodes.add(new Node(id, name, nodeType));
         } else {
-            Boolean ok = true;
+            boolean ok = true;
             for (Node node : nodes) {
                 if (node.getNodeType() == nodeType) {
                     ok = false;
@@ -60,8 +60,8 @@ public class Data {
     }
 
     public Data() {
-        this.nodes = new ArrayList<Node>();
-        this.connections = new ArrayList<Connection>();
+        this.nodes = new ArrayList<>();
+        this.connections = new ArrayList<>();
     }
 
     public List<Node> getNodes() {

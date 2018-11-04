@@ -1,5 +1,7 @@
 package pl.put.poznan.analyzer.commons;
 
+import java.util.Objects;
+
 public class Connection {
 
 
@@ -44,5 +46,20 @@ public class Connection {
                 ", to: " + to +
                 ", value: " + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Connection that = (Connection) o;
+        return Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to) &&
+                Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, value);
     }
 }
