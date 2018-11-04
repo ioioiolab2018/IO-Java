@@ -1,27 +1,13 @@
 package pl.put.poznan.analyzer.commons;
 
-import javax.persistence.*;
+import java.util.Objects;
 
-@Entity()
-@Table(name = "CONNECTIONS")
 public class Connection {
 
-    @Column
-    @Id
-    @GeneratedValue
-    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FROM_NODE_ID")
     private Node from;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TO_NODE_ID")
     private Node to;
-
-    @Column
     private Float value;
-
 
     public Connection(Node from, Node to, Float value) {
         this.from = from;
@@ -60,5 +46,20 @@ public class Connection {
                 ", to: " + to +
                 ", value: " + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Connection that = (Connection) o;
+        return Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to) &&
+                Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, value);
     }
 }

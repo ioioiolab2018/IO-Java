@@ -1,37 +1,43 @@
 package pl.put.poznan.analyzer.commons;
 
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Entity(name = "NODES")
+
 public class Node {
 
-    @GeneratedValue
-    @Id
-    private Long id;
-
-    @Column
+    private Integer id;
     private String name;
-
-    @Column
-    @Enumerated(EnumType.STRING)
     private NodeType nodeType;
-
-    @Column
-    @OneToMany(mappedBy = "from")
     private List<Connection> outgoing;
-
-    @Column
-    @OneToMany(mappedBy = "to")
     private List<Connection> incoming;
+
 
     // setters getters
 
-    public Long getId() {
+
+    public Node(Integer id, String name, NodeType nodeType, List<Connection> outgoing, List<Connection> incoming) {
+        this.id = id;
+        this.name = name;
+        this.nodeType = nodeType;
+        this.outgoing = outgoing;
+        this.incoming = incoming;
+    }
+
+    public Node(Integer id, String name, NodeType nodeType) {
+        this.id = id;
+        this.name = name;
+        this.nodeType = nodeType;
+        this.outgoing = new ArrayList<>();
+        this.incoming = new ArrayList<>();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -68,6 +74,19 @@ public class Node {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(id, node.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, nodeType, outgoing, incoming);
+    }
+
+    @Override
     public String toString() {
         return "Node{" +
                 "id: " + id +
@@ -77,4 +96,6 @@ public class Node {
                 ", incoming: " + incoming +
                 '}';
     }
+
+
 }
