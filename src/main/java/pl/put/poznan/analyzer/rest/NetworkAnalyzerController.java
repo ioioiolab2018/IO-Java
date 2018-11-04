@@ -3,22 +3,24 @@ package pl.put.poznan.analyzer.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Node;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/{text}")
+@RequestMapping("")
 public class NetworkAnalyzerController {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkAnalyzerController.class);
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public Node get(@PathVariable String text,
+    @RequestMapping(path = "/test/{connections}", method = RequestMethod.GET, produces = "application/json")
+    public Node get(@PathVariable List<Connection> connections,
                     @RequestParam(value = "transforms", defaultValue = "upper,escape") String[] transforms) {
         // log the parameters
-        logger.debug(text);
+        logger.debug(String.valueOf(connections));
         logger.debug(Arrays.toString(transforms));
         return null;
     }
