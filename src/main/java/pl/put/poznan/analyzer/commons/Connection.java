@@ -5,29 +5,29 @@ import java.util.Objects;
 public class Connection {
 
 
-    private Node from;
-    private Node to;
+    private int from;
+    private int to;
     private Float value;
 
-    public Connection(Node from, Node to, Float value) {
+    public Connection(int from, int to, Float value) {
         this.from = from;
         this.to = to;
         this.value = value;
     }
 
-    public Node getFrom() {
+    public int getFrom() {
         return from;
     }
 
-    public void setFrom(Node from) {
+    public void setFrom(int from) {
         this.from = from;
     }
 
-    public Node getTo() {
+    public int getTo() {
         return to;
     }
 
-    public void setTo(Node to) {
+    public void setTo(int to) {
         this.to = to;
     }
 
