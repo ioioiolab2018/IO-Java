@@ -3,80 +3,67 @@ package pl.put.poznan.analyzer.commons;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Data {
-    private List<Node> nodes;
-    private List<Connection> connections;
-
-    public void addConnection(Node nodeA, Node nodeB, Float value) {
-        this.connections.add(new Connection(nodeA, nodeB, value));
-        if (this.nodes.indexOf(nodeA) == -1) {
-            this.nodes.add(nodeA);
-        }
-        if (this.nodes.indexOf(nodeB) == -1) {
-            this.nodes.add(nodeB);
-        }
-    }
-
-    public void addNode(String name, NodeType nodeType) {
-        int max = 0;
+    public static List<Connection> getConnections(List<Node> nodes) {
+        List<Connection> connections = new ArrayList<>();
         for (Node node : nodes) {
-            if (node.getId() >= max) {
-                max = node.getId();
-            }
-        }
-        int id = max + 1;
-        if (nodeType == NodeType.REGULAR) {
-            nodes.add(new Node(id, name, nodeType));
-        } else {
-            boolean ok = true;
-            for (Node node : nodes) {
-                if (node.getNodeType() == nodeType) {
-                    ok = false;
+            for (Connection con : node.getIncoming()) {
+                if (connections.indexOf(con) == -1) {
+                    connections.add(con);
                 }
             }
-            if (ok) {
-                nodes.add(new Node(id, name, nodeType));
+            for (Connection con : node.getOutgoing()) {
+                if (connections.indexOf(con) == -1) {
+                    connections.add(con);
+                }
             }
         }
-    }
-
-    public Node getNode(int nodeId) {
-        for (Node node : nodes) {
-            if (node.getId() == nodeId) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    public Node getEntry() {
-        for (Node node : nodes
-        ) {
-            if (node.getNodeType() == NodeType.ENTRY) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    public Data() {
-        this.nodes = new ArrayList<>();
-        this.connections = new ArrayList<>();
-    }
-
-    public List<Node> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(List<Node> nodes) {
-        this.nodes = nodes;
-    }
-
-    public List<Connection> getConnections() {
         return connections;
     }
 
-    public void setConnections(List<Connection> connections) {
-        this.connections = connections;
+    public static Node getNodeById(List<Node> nodes, int id) {
+        for (Node node : nodes) {
+            if (node.getId() == id) {
+                return node;
+            }
+        }
+        throw (new IllegalStateException());
     }
+
+    public static boolean checkNetwork(List<Node> nodes) {
+        //check nodes id
+        // Check exit and enter
+        int entryCount = 0;
+        int exitCount = 0;
+        for (Node checkedNode : nodes) {
+            if (checkedNode.getNodeType() == NodeType.ENTRY)
+                entryCount += 1;
+            if (checkedNode.getNodeType() == NodeType.EXIT)
+                exitCount += 1;
+            if (entryCount > 1 || exitCount > 1) {
+                return false;
+            }
+            for (Node node : nodes) {
+                if (!checkedNode.equals(node)) {
+                    if (checkedNode.getId() == node.getId())
+                        return false;
+                }
+            }
+            //sprawdzanie poprawnosci id w connections
+            for (Connection con : checkedNode.getIncoming()) {
+                if (con.getTo() == checkedNode.getId()) {
+                    return false;
+                }
+            }
+            for (Connection con : checkedNode.getOutgoing()) {
+                if (con.getFrom() == checkedNode.getId()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 }
