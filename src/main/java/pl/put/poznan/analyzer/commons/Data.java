@@ -48,12 +48,12 @@ public class Data {
             }
             //sprawdzanie poprawnosci id w connections
             for (Connection con : checkedNode.getIncoming()) {
-                if (con.getTo() == checkedNode.getId()) {
+                if (con.getTo() != checkedNode.getId()) {
                     return false;
                 }
             }
             for (Connection con : checkedNode.getOutgoing()) {
-                if (con.getFrom() == checkedNode.getId()) {
+                if (con.getFrom() != checkedNode.getId()) {
                     return false;
                 }
             }
@@ -130,16 +130,17 @@ public class Data {
                 if (!checkedNode.equals(node)) {
                     if (checkedNode.getId() == node.getId())
                         return false;
+
                 }
             }
             //sprawdzanie poprawnosci id w connections
             for (Connection con : checkedNode.getIncoming()) {
-                if (con.getTo() == checkedNode.getId()) {
+                if (con.getTo() != checkedNode.getId()) {
                     return false;
                 }
             }
             for (Connection con : checkedNode.getOutgoing()) {
-                if (con.getFrom() == checkedNode.getId()) {
+                if (con.getFrom() != checkedNode.getId()) {
                     return false;
                 }
             }
