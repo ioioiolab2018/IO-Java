@@ -39,9 +39,12 @@ public class Connection {
         this.value = value;
     }
 
+    public Connection() {
+    }
+
     @Override
     public String toString() {
-        return "Node{" +
+        return "Connection{" +
                 "from: " + from +
                 ", to: " + to +
                 ", value: " + value +
