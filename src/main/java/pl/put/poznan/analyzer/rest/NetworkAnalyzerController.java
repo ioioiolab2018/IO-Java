@@ -18,14 +18,17 @@ public class NetworkAnalyzerController {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkAnalyzerController.class);
 
-    @RequestMapping(path = "/test/nodes/{nodes}", method = RequestMethod.GET, produces = "application/json")
-    public List<Node> get(@PathVariable List<Node> nodes) {
-        // log the parameters
+    @RequestMapping(path = "/test/nodes", method = RequestMethod.GET, produces = "application/json")
+    public List<Connection> get(@RequestParam(name = "nodes") List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
-        return nodes;
+        if (!Data.checkNetwork(nodes)) {
+            logger.error("Niepoprawna siec");
+            throw (new InternalError());
+        }
+        return BFS.run(nodes);
     }
 
-    @RequestMapping(path = "/bfs/nodes/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(path = "/bfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public List<Connection> postCon(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));

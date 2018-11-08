@@ -20,7 +20,7 @@
         "value": 5
       }
     ],
-    "incoming": null
+    "incoming": []
   },
   {
     "id": 1,
@@ -161,7 +161,7 @@
     "id": 6,
     "name": "koniec",
     "nodeType": "EXIT",
-    "outgoing": null,
+    "outgoing": [],
     "incoming": [
       {
         "from": 2,
