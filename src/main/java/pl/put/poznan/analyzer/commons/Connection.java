@@ -2,6 +2,9 @@ package pl.put.poznan.analyzer.commons;
 
 import java.util.Objects;
 
+/**
+ * Connection between two types
+ */
 public class Connection {
 
 
@@ -9,6 +12,12 @@ public class Connection {
     private int to;
     private Float value;
 
+    /**
+     * Connection constructor
+     * @param from node from which the connection starts
+     * @param to node in which the connection ends
+     * @param value value of the connection
+     */
     public Connection(int from, int to, Float value) {
         this.from = from;
         this.to = to;

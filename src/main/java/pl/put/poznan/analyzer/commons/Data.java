@@ -7,7 +7,11 @@ import java.util.Map;
 
 
 public class Data {
-    // Dla HashMapy
+    /**
+     * Change network format from list of nodes to hashMap
+     * @param nodes network as the list of nodes
+     * @return the network as hashMap
+     */
     public static Map<Integer, Node> getNodesMap(List<Node> nodes){
         Map<Integer, Node> nodesMap = new HashMap<>();
         for (Node node: nodes) {
@@ -33,8 +37,14 @@ public class Data {
         return  null;
     }
 
+    /**
+     * Check validity of the network (hashMap)
+     * @param nodes the entire network as hashMap
+     * @return TRUE, when the network is valid
+     *         FALSE, when the network is invalid
+     */
     public static boolean checkNetwork(Map<Integer,Node> nodes) {
-        // Check exit and enter
+        // Check if there are only one exit and entry
         int entryCount = 0;
         int exitCount = 0;
         for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
@@ -46,7 +56,7 @@ public class Data {
             if (entryCount > 1 || exitCount > 1) {
                 return false;
             }
-            //sprawdzanie poprawnosci id w connections
+            // Check validity of id in incoming and outgoing connections
             for (Connection con : checkedNode.getIncoming()) {
                 if (con.getTo() != checkedNode.getId()) {
                     return false;
@@ -113,9 +123,15 @@ public class Data {
         return  null;
     }
 
+    /**
+     * Check validity of the network (list of nodes)
+     * @param nodes the entire network as list of nodes
+     * @return TRUE, when the network is valid
+     *         FALSE, when the network is invalid
+     */
     public static boolean checkNetwork(List<Node> nodes) {
         //check nodes id
-        // Check exit and enter
+        // Check if there are only one exit and entry
         int entryCount = 0;
         int exitCount = 0;
         for (Node checkedNode : nodes) {
@@ -133,7 +149,7 @@ public class Data {
 
                 }
             }
-            //sprawdzanie poprawnosci id w connections
+            // Check validity of id in incoming and outgoing connections
             for (Connection con : checkedNode.getIncoming()) {
                 if (con.getTo() != checkedNode.getId()) {
                     return false;

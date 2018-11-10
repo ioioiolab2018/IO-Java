@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 public class Node {
 
     private int id;
@@ -17,6 +16,14 @@ public class Node {
     // setters getters
 
 
+    /**
+     * Node constructor
+     * @param id node id
+     * @param name optional description of the node
+     * @param nodeType node type
+     * @param outgoing list of outgoing connections from the node
+     * @param incoming list of incoming connections from the node
+     */
     public Node(Integer id, String name, NodeType nodeType, List<Connection> outgoing, List<Connection> incoming) {
         this.id = id;
         this.name = name;
@@ -25,6 +32,12 @@ public class Node {
         this.incoming = incoming;
     }
 
+    /**
+     * Constructor of the node without connections
+     * @param id node id
+     * @param name optional description of the node
+     * @param nodeType node type
+     */
     public Node(Integer id, String name, NodeType nodeType) {
         this.id = id;
         this.name = name;
