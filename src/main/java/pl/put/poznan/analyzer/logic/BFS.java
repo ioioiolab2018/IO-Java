@@ -1,24 +1,15 @@
 package pl.put.poznan.analyzer.logic;
 
+import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.Connection;
+import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
+import pl.put.poznan.analyzer.commons.NodeType;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.*;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Problem;
-
-import Classes.Connection;
-import Classes.Data;
-import Classes.Node;
-import Classes.NodeType;
-
-import java.util.*;
-
+@Service
 public class BFS {
 
     public static List<Node> utworz() {
@@ -90,28 +81,28 @@ public class BFS {
         int stala, noweId, stareIdKoncowe, dokad, licznik = 0;
 
         List<Node> grafNiewazony = new LinkedList<>();
-        for (Node n : przykladowe) 
+        for (Node n : przykladowe)
         {
             //Node n = przykladowe.get(0);
-                //dla glownych wierzcholkow
+            //dla glownych wierzcholkow
             List<Connection> glownePolaczenia = new LinkedList<>();
             glownePolaczenia.clear();
             //glownePolaczenia.clear();
-            for (Connection con : n.getOutgoing()) 
-            {                
+            for (Connection con : n.getOutgoing())
+            {
                 stala = 1000;
                 wartosc = con.getValue(); //wartosc
                 dokad = con.getTo();        //wierzcholek docelowy
                 con.setValue((float) 1.0);   //wartosc wychodzaca z glownego wierzcholka na 1.0
                 if(wartosc > 1.0)
                     con.setTo(stala + dokad);       //dla pierwszego wierzchołka powinniśmy otrzymać połączenie np. [0,1001,1]
-                glownePolaczenia.add(con);  
-                
+                glownePolaczenia.add(con);
+
                 //dla pozostalych polaczen
-                
+
                 while(wartosc > 1.0)
                 {
-                    wartosc--; 
+                    wartosc--;
                     Node n1 = new Node();
                     n1 = n;
                     n1.setNodeType(NodeType.REGULAR);
@@ -131,19 +122,19 @@ public class BFS {
                     coList.add(co);
                     n1.setOutgoing(coList);
                     grafNiewazony.add(n1);
-                    System.out.println(n1.getId() + " " + n1.getName() + " " + n1.getOutgoing().toString() + n1.getNodeType());  
+                    System.out.println(n1.getId() + " " + n1.getName() + " " + n1.getOutgoing().toString() + n1.getNodeType());
                 }
-            }            
-            
+            }
+
             n.setOutgoing(glownePolaczenia);
             //grafNiewazony.add(new Node(n.getId(), n.getName(), n.getNodeType(), glownePolaczenia, null));
             grafNiewazony.add(n);
-            
-            
-            
+
+
+
             //System.out.println(n.getId() + " " + n.getName() + " " + n.getOutgoing().toString() + " " + n.getNodeType());
-        
-        //}
+
+            //}
         }
         for (Node nd : grafNiewazony) {
             System.out.println(nd.getId() + " " + nd.getName() + " " + nd.getOutgoing().toString() + " " + nd.getNodeType());
