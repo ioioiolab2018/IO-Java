@@ -16,13 +16,14 @@ public class BFS {
             Node newNode = new Node(node.getId(), node.getName(), node.getNodeType());
             newList.add(newNode);
             for (Connection con : node.getOutgoing()) {
+                float realValue=con.getValue();
                 int value = (int) Math.ceil(con.getValue());
                 int id = con.getTo();
                 if (value > 1) {
                     nodesId -= 1;
                     Node additional = new Node(nodesId, "Additional", NodeType.REGULAR);
                     newList.add(additional);
-                    newNode.getOutgoing().add(new Connection(newNode.getId(),nodesId, (float) value));
+                    newNode.getOutgoing().add(new Connection(newNode.getId(),nodesId, realValue));
                     value -= 1;
                     if (value <= 1) {
                         additional.getOutgoing().add(new Connection(additional.getId(), id, (float) value));
@@ -92,7 +93,9 @@ public class BFS {
             for (Connection con : v.getOutgoing()) {
                 u = con.getTo();
                 if (!visited.get(u)) {
-                    patchConnection.add(con);
+                    if(con.getFrom()>=0 || con.getTo()>=0) {
+                        patchConnection.add(con);
+                    }
                     patchNode.add(nodes.get(u));
                     Q.add(Data.getNodeById(nodes, u));
                     visited.replace(u, true);
@@ -101,7 +104,15 @@ public class BFS {
             }
         }
         if (found) {
-            return patchConnection;//TODO
+            List<Connection> result= new ArrayList<>();
+            for (Connection con : patchConnection){
+                if(con.getFrom()>=0) {
+                    int i = patchConnection.indexOf(con);
+                    Connection temp= patchConnection.get(i+1);
+                    result.add(new Connection(con.getFrom(),temp.getTo(), con.getValue()));
+                }
+            }
+            return  result;
         }
         return null;
     }
