@@ -11,7 +11,24 @@ import java.util.*;
 
 @Service
 public class BFS {
+    /*
 
+    private Node getUnvisitedChildNode(Node n)
+    {
+
+            int index=nodes.indexOf(n);
+            int j=0;
+            while(j<size)
+            {
+                    if(adjMatrix[index][j]==1 && ((Node)nodes.get(j)).visited==false)
+                    {
+                            return (Node)nodes.get(j);
+                    }
+                    j++;
+            }
+            return null;
+    }
+*/
     public static List<Node> utworz() {
         List<Node> przykladowe = new ArrayList<>();
 
@@ -46,7 +63,7 @@ public class BFS {
         przykladowe.add(new Node(3, "elit", NodeType.REGULAR, c4o, c4i));
 
         List<Connection> c5o = new ArrayList<>();
-        c5o.add(new Connection(4, 5, 3.0f));
+        c5o.add(new Connection(4, 5, 13.0f));
         c5o.add(new Connection(4, 2, 2.0f));
         c5o.add(new Connection(4, 6, 8.0f));
         List<Connection> c5i = new ArrayList<>();
@@ -57,7 +74,7 @@ public class BFS {
         c6o.add(new Connection(5, 6, 4.0f));
         List<Connection> c6i = new ArrayList<>();
         c6i.add(new Connection(3, 5, 7.0f));
-        c6i.add(new Connection(4, 5, 3.0f));
+        c6i.add(new Connection(4, 5, 13.0f));
         przykladowe.add(new Node(5, "culpa", NodeType.REGULAR, c6o, c6i));
 
         List<Connection> c7o = new ArrayList<>();
@@ -70,14 +87,10 @@ public class BFS {
         return przykladowe;
     }
 
-    public static List<Connection> run(List<Node> nodesList) {
-
-        System.out.println("WITAMY W BFS\n");
-
-        List<Node> przykladowe = utworz();
-
+    public static List<Connection> run(List<Node> noList) {
+        List <Node> przykladowe = utworz();
         float wartosc;
-        int stala, noweId, stareIdKoncowe, dokad, licznik = 0;
+        int stala, noweId, stareIdKoncowe, dokad, skad, licznik = 0;
 
         List<Node> grafNiewazony = new LinkedList<>();
         for (Node n : przykladowe) 
@@ -94,12 +107,13 @@ public class BFS {
             //glownePolaczenia.clear();
             for (Connection con : n.getOutgoing()) 
             {                
-                stala = 1000;
-                wartosc = con.getValue(); //wartosc
-                dokad = con.getTo();        //wierzcholek docelowy
-                con.setValue((float) 1.0);   //wartosc wychodzaca z glownego wierzcholka na 1.0
+                licznik--;
+                wartosc = con.getValue();     //wartosc
+                dokad = con.getTo();          //wierzcholek docelowy
+                skad = con.getFrom();
+                //con.setValue((float) 1.0);    //wartosc wychodzaca z glownego wierzcholka na 1.0
                 if(wartosc > 1.0)
-                    con.setTo(stala + dokad);       //dla pierwszego wierzchołka powinniśmy otrzymać połączenie np. [0,1001,1]
+                    con.setTo(licznik);       //dla pierwszego wierzchołka powinniśmy otrzymać połączenie np. [0, 000100001            [0,1001,1]
                 else con.setTo(dokad);
                 glownePolaczenia.add(con);  
                 
@@ -109,18 +123,20 @@ public class BFS {
                 {
                     wartosc--; 
                     Node n1 = new Node();
-                    n1.setNodeType(NodeType.REGULAR);
-                    noweId=con.getTo() + stala;
-                    n1.setId(noweId);
-                    stala+=1000;
+                    n1.setNodeType(NodeType.ADDITIONAL);
+                    //noweId=skad *1000000 + dokad*1000 + stala;
+                    n1.setId(licznik);
+                    //stala++;
                     Connection co = new Connection(); //polaczenie wyjsciowe dla nowego wezla
                     if(wartosc == 1.0)
                     {
-                        co = new Connection(noweId, dokad, (float) 1.0);
+                        co = new Connection(licznik, dokad, (float) 1.0);
                     }
                     else
                     {
-                        co = new Connection(noweId, noweId+1000, (float) 1.0);
+                        
+                        co = new Connection(licznik, licznik-1, (float) 1.0);
+                        licznik--;
                     }
                     List <Connection> coList = new LinkedList<>();
                     coList.add(co);
@@ -133,26 +149,18 @@ public class BFS {
             n.setOutgoing(glownePolaczenia);
             //grafNiewazony.add(new Node(n.getId(), n.getName(), n.getNodeType(), glownePolaczenia, null));
             grafNiewazony.add(n);
-            
-            
-            
-            //System.out.println(n.getId() + " " + n.getName() + " " + n.getOutgoing().toString() + " " + n.getNodeType());
-        
-        //}
-        }
-        for (Node nd : grafNiewazony) {
-            System.out.println(nd.getId() + " " + nd.getName() + " " + nd.getOutgoing().toString() + " " + nd.getNodeType());
         }
 
-        
+        for(Node nd: grafNiewazony)
+        {
+            System.out.println(nd.toString());            
+        }
+
         Map<Integer, Node> nodes = Data.getNodesMap(grafNiewazony);
-
         if (nodes == null) {
-            System.out.println("DLACZEGO TO NIE DZIAŁA?");
+            System.out.println("blad null");
             return null;
         }
-        //ObjectMapper mapper = new ObjectMapper();
-        //Node n1 = mapper.readValue(new File("graf1.json"), Node.class);
 
         Map<Integer, Boolean> visited = new HashMap<>();
         Queue<Node> Q = new PriorityQueue<>();
@@ -163,49 +171,85 @@ public class BFS {
         }
         // Tworzymy tablicę ścieżki
         List<Node> patchNode = new LinkedList<>();
-
         List<Connection> patchConnection = new LinkedList<>();
 
-        Node vs = Data.getEnterNode(nodes); //wierzchołek startowy
-        if (vs != null) {
-            patchNode.add(vs);
+        Node entry = Data.getEnterNode(nodes); //wierzchołek startowy
+        if (entry != null) {
+            patchNode.add(entry);
         } else {
-            System.out.println("lol2");
             return null;
         }
 
-        Q.add(vs);
-        visited.replace(vs.getId(), true);
-        Node v;
+        Q.add(entry);
+        visited.replace(entry.getId(), true);
+        Node v=null;
         int u;
         boolean found = false;
 
         while (!(Q.isEmpty())) {
+            
             v = Q.poll();
+            
+            for(Connection conn: v.getOutgoing())
+            {
+                System.out.println(v.getId() + ": " + conn.toString());
+            }
+            
             // Pobieramy z kolejki wierzchołek v
             if (v.getNodeType() == NodeType.EXIT) {// Sprawdzamy koniec ścieżki
                 found = true;        // Zaznaczamy sukces
                 break;               // Przerywamy pętlę
             }
+            
             // Przeglądamy sąsiadów wierzchołka v
             for (Connection con : v.getOutgoing()) {
                 u = con.getTo();
                 if (!visited.get(u)) {
-                    patchConnection.add(con);
+                    if(con.getFrom()>=0 || con.getTo()>=0) 
+                    {
+                        patchConnection.add(con);
+                    }
                     patchNode.add(nodes.get(u));
                     Q.add(Data.getNodeById(nodes, u));
                     visited.replace(u, true);
                     break;
                 }
-            }
+            }            
         }
-        for(Connection conn: patchConnection)
+        /*
+        if(found)
         {
-            System.out.println("1:");
-            System.out.println(conn.toString());
+            while(v.getId()!=0)
+            {
+                System.out.println(v.getId() + " ");
+                v.setId(patchNode.get(v.getId()).getId());
+            }
+        }*/
+        System.out.println("................");
+        for(Node n: patchNode)
+        {
+            System.out.println(n.toString());
         }
+        
         if (found) {
-            return patchConnection;//TODO
+            
+            List<Connection> result= new ArrayList<>();
+            for (Connection con : patchConnection){
+                if(con.getFrom()>=0) {
+                    int i = patchConnection.indexOf(con);
+                    Connection temp= patchConnection.get(i+1);
+                    result.add(new Connection(con.getFrom(),temp.getTo(), con.getValue()));
+                }
+            }
+            int suma=0;
+            for (Connection con: patchConnection)
+            {
+                System.out.println(con.toString());
+                suma++;
+            }
+            System.out.println("WYNIK:");
+            System.out.println(suma);
+            return  result;
         }
         return null;
     }
