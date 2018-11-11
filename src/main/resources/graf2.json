@@ -1,0 +1,182 @@
+[
+  {
+    "id": 0,
+    "name": "home",
+    "nodeType": "ENTRY",
+    "outgoing": [
+      {
+        "from": 0,
+        "to": 1,
+        "value": 3
+      },
+      {
+        "from": 0,
+        "to": 2,
+        "value": 2
+      },
+      {
+        "from": 0,
+        "to": 3,
+        "value": 5
+      }
+    ],
+    "incoming": []
+  },
+  {
+    "id": 1,
+    "name": "A",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 1,
+        "to": 4,
+        "value": 3
+      }
+    ],
+    "incoming": [
+      {
+        "from": 0,
+        "to": 1,
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "B",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 2,
+        "to": 4,
+        "value": 1
+      },
+      {
+        "from": 2,
+        "to": 6,
+        "value": 5
+      }
+    ],
+    "incoming": [
+      {
+        "from": 0,
+        "to": 2,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "C",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 3,
+        "to": 5,
+        "value": 2
+      }
+    ],
+    "incoming": [
+      {
+        "from": 0,
+        "to": 3,
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "D",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 4,
+        "to": 6,
+        "value": 4
+      }
+    ],
+    "incoming": [
+      {
+        "from": 1,
+        "to": 4,
+        "value": 3
+      },
+      {
+        "from": 2,
+        "to": 4,
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "E",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 5,
+        "to": 6,
+        "value": 1
+      },
+      {
+        "from": 5,
+        "to": 7,
+        "value": 4
+      }
+    ],
+    "incoming": [
+      {
+        "from": 2,
+        "to": 5,
+        "value": 6
+      },
+      {
+        "from": 3,
+        "to": 5,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "F",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 6,
+        "to": 7,
+        "value": 2
+      }
+    ],
+    "incoming": [
+      {
+        "from": 4,
+        "to": 6,
+        "value": 4
+      },
+      {
+        "from": 5,
+        "to": 6,
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "school",
+    "nodeType": "EXIT",
+    "outgoing": [],
+    "incoming": [
+      {
+        "from": 5,
+        "to": 7,
+        "value": 4
+      },
+      {
+        "from": 6,
+        "to": 7,
+        "value": 2
+      }
+    ]
+  }
+]
