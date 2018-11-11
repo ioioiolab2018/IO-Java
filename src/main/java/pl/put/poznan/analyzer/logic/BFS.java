@@ -148,10 +148,10 @@ public class BFS {
         //grafNiewazony.sort(grafNiewazony.getId());
         
         
-        for(Node nd: grafNiewazony)
+        /*for(Node nd: grafNiewazony)
         {
             System.out.println(nd.toString());            
-        }
+        }*/
 
         System.out.println("................");
         Node vs = new Node(); 
@@ -186,7 +186,7 @@ public class BFS {
         while(!(Q.isEmpty()))
         {
 	    v1 =(Node)Q.remove();
-            System.out.println(v1.toString());
+            //System.out.println(v1.toString());
             Node v = new Node(v1.getId(),v1.getName(),v1.getNodeType(),v1.getOutgoing(),v1.getIncoming());
             //v = Q.poll();         // Pobieramy z kolejki wierzchołek v
             if(v.getNodeType() == NodeType.EXIT)            // Sprawdzamy koniec ścieżki
@@ -251,4 +251,3 @@ public class BFS {
        return listaKoncowa;
     }
 }
-     
