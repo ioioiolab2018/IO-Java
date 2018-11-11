@@ -21,18 +21,18 @@ public class BFS {
                 int id = con.getTo();
                 if (value > 1) {
                     nodesId -= 1;
-                    Node additional = new Node(nodesId, "Additional", NodeType.REGULAR);
+                    Node additional = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
                     newList.add(additional);
                     newNode.getOutgoing().add(new Connection(newNode.getId(),nodesId, realValue));
                     value -= 1;
                     if (value <= 1) {
                         additional.getOutgoing().add(new Connection(additional.getId(), id, (float) value));
-                        break;
+                        continue;
                     } else {
                         nodesId -= 1;
                         additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float) value));
                         while (true) {
-                            Node last =  new Node(nodesId, "Additional", NodeType.REGULAR);
+                            Node last =  new Node(nodesId, "Additional", NodeType.ADDITIONAL);
                             newList.add(last);
                             value -= 1;
                             if (value <= 1) {
@@ -52,6 +52,7 @@ public class BFS {
 
         System.out.println(newList);
 
+        Map<Integer, Node> network = Data.getNodesMap(nodesList);
         Map<Integer, Node> nodes = Data.getNodesMap(newList);
         if (nodes == null) {
             System.out.println("blad null");
@@ -59,19 +60,20 @@ public class BFS {
         }
 
         Map<Integer, Boolean> visited = new HashMap<>();
-        Queue<Node> Q = new PriorityQueue<>();
+        Queue<Node> Q = new LinkedList<>();
         // Mape visited zerujemy
         for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
             int id = entry.getKey();
             visited.putIfAbsent(id, false);
         }
         // Tworzymy tablicę ścieżki
-        List<Node> patchNode = new LinkedList<>();
-        List<Connection> patchConnection = new LinkedList<>();
+        List<Node> pathNode = new LinkedList<>();
+        List<Connection> pathConnection = new LinkedList<>();
 
+        Node exit = null;
         Node entry = Data.getEnterNode(nodes); //wierzchołek startowy
         if (entry != null) {
-            patchNode.add(entry);
+            pathNode.add(entry);
         } else {
             return null;
         }
@@ -87,32 +89,43 @@ public class BFS {
             // Pobieramy z kolejki wierzchołek v
             if (v.getNodeType() == NodeType.EXIT) {// Sprawdzamy koniec ścieżki
                 found = true;        // Zaznaczamy sukces
+                exit = v;
                 break;               // Przerywamy pętlę
             }
             // Przeglądamy sąsiadów wierzchołka v
             for (Connection con : v.getOutgoing()) {
                 u = con.getTo();
                 if (!visited.get(u)) {
-                    if(con.getFrom()>=0 || con.getTo()>=0) {
-                        patchConnection.add(con);
-                    }
-                    patchNode.add(nodes.get(u));
+                    pathConnection.add(con);
+                    pathNode.add(nodes.get(u));
                     Q.add(Data.getNodeById(nodes, u));
                     visited.replace(u, true);
-                    break;
                 }
             }
         }
         if (found) {
-            List<Connection> result= new ArrayList<>();
-            for (Connection con : patchConnection){
-                if(con.getFrom()>=0) {
-                    int i = patchConnection.indexOf(con);
-                    Connection temp= patchConnection.get(i+1);
-                    result.add(new Connection(con.getFrom(),temp.getTo(), con.getValue()));
+            List<Node> result= new ArrayList<>();
+            List<Connection> resultPath = new ArrayList<>();
+            Collections.reverse(pathConnection);
+            Node currentNode = exit;
+            Node varNode = null;
+            Node pastNode = Data.getNodeById(network, exit.getId());
+            result.add(pastNode);
+            for (Connection con :pathConnection){
+                if(con.getTo() == currentNode.getId()) {
+                    currentNode = Data.getNodeById(nodes, con.getFrom());
+                    if(currentNode.getId() >= 0) {
+                        varNode = Data.getNodeById(network, con.getFrom());
+                        result.add(varNode);
+                        for (Connection c : varNode.getOutgoing())
+                            if(c.getTo() == pastNode.getId())
+                                resultPath.add(c);
+                        pastNode = currentNode;
+                    }
                 }
             }
-            return  result;
+            Collections.reverse(resultPath);
+            return resultPath;
         }
         return null;
     }
