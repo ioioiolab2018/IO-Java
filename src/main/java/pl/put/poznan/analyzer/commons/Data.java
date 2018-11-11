@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * This class is used to manage a network of nodes
+ */
 public class Data {
+
     /**
-     * Change network format from list of nodes to hashMap
-     * @param nodes network as the list of nodes
+     * Changes network format from list of nodes to hashMap
+     * @param nodes the network as the list of nodes
      * @return the network as hashMap
      */
     public static Map<Integer, Node> getNodesMap(List<Node> nodes){
@@ -38,10 +42,15 @@ public class Data {
     }
 
     /**
-     * Check validity of the network (hashMap)
-     * @param nodes the entire network as hashMap
+     * Checks validity of the network (when given network is a hashMap),
+     * which consists of:
+     *  <br>- checking if there is only one entry node
+     *  <br>- checking if there is only one exit node
+     *  <br>- checking validity of nodes ids
+     *
+     * @param nodes the network (as a hashMap) to be checked for validity
      * @return TRUE, when the network is valid
-     *         FALSE, when the network is invalid
+     *         <br>FALSE, when the network is invalid
      */
     public static boolean checkNetwork(Map<Integer,Node> nodes) {
         // Check if there are only one exit and entry
@@ -124,10 +133,14 @@ public class Data {
     }
 
     /**
-     * Check validity of the network (list of nodes)
-     * @param nodes the entire network as list of nodes
+     * Checks validity of the network (when given network is a list of nodes)
+     * which consists of:
+     *  <br>- checking if there is only one entry node
+     *  <br>- checking if there is only one exit node
+     *  <br>- checking validity of nodes ids
+     * @param nodes the network (as a list of nodes) to be checked for validity
      * @return TRUE, when the network is valid
-     *         FALSE, when the network is invalid
+     *         <br>FALSE, when the network is invalid
      */
     public static boolean checkNetwork(List<Node> nodes) {
         //check nodes id

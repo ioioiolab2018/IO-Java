@@ -1,8 +1,23 @@
 package pl.put.poznan.analyzer.commons;
 
 /**
- * Available values are ENTRY, EXIT and REGULAR
+ * Available types of nodes
  */
 public enum NodeType {
-    ENTRY, EXIT, REGULAR
+    /**
+     * A node where network starts, doesn't have any incoming connections.
+     * Can be only one in the entire network
+     */
+    ENTRY,
+
+    /**
+     * A node where network ends, doesn't have any outcoming connections.
+     * Can be only one in the entire network
+     */
+    EXIT,
+
+    /**
+     * A node inside network, which isn't an end or start of the network
+     */
+    REGULAR
 }

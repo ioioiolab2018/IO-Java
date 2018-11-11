@@ -3,7 +3,7 @@ package pl.put.poznan.analyzer.commons;
 import java.util.Objects;
 
 /**
- * Connection between two types
+ * This class is used to manage a single connection between two nodes
  */
 public class Connection {
 
@@ -13,7 +13,7 @@ public class Connection {
     private Float value;
 
     /**
-     * Connection constructor
+     * Class constructor
      * @param from node from which the connection starts
      * @param to node in which the connection ends
      * @param value value of the connection
@@ -48,6 +48,9 @@ public class Connection {
         this.value = value;
     }
 
+    /**
+     * Empty class constructor
+     */
     public Connection() {
     }
 
