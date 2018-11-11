@@ -61,7 +61,6 @@ public class BFS {
         przykladowe.add(new Node(5, "culpa", NodeType.REGULAR, c6o, c6i));
 
         List<Connection> c7o = new ArrayList<>();
-        c7o.add(new Connection(6, 2, 4.0f));
         List<Connection> c7i = new ArrayList<>();
         c7i.add(new Connection(2, 6, 10.0f));
         c7i.add(new Connection(4, 6, 8.0f));
@@ -81,30 +80,35 @@ public class BFS {
         int stala, noweId, stareIdKoncowe, dokad, licznik = 0;
 
         List<Node> grafNiewazony = new LinkedList<>();
-        for (Node n : przykladowe)
+        for (Node n : przykladowe) 
         {
             //Node n = przykladowe.get(0);
-            //dla glownych wierzcholkow
+                //dla glownych wierzcholkow
+            if(n.getNodeType() == NodeType.EXIT)
+            {
+                grafNiewazony.add(n);
+                break;
+            }
             List<Connection> glownePolaczenia = new LinkedList<>();
             glownePolaczenia.clear();
             //glownePolaczenia.clear();
-            for (Connection con : n.getOutgoing())
-            {
+            for (Connection con : n.getOutgoing()) 
+            {                
                 stala = 1000;
                 wartosc = con.getValue(); //wartosc
                 dokad = con.getTo();        //wierzcholek docelowy
                 con.setValue((float) 1.0);   //wartosc wychodzaca z glownego wierzcholka na 1.0
                 if(wartosc > 1.0)
                     con.setTo(stala + dokad);       //dla pierwszego wierzchołka powinniśmy otrzymać połączenie np. [0,1001,1]
-                glownePolaczenia.add(con);
-
+                else con.setTo(dokad);
+                glownePolaczenia.add(con);  
+                
                 //dla pozostalych polaczen
-
+                
                 while(wartosc > 1.0)
                 {
-                    wartosc--;
+                    wartosc--; 
                     Node n1 = new Node();
-                    n1 = n;
                     n1.setNodeType(NodeType.REGULAR);
                     noweId=con.getTo() + stala;
                     n1.setId(noweId);
@@ -122,28 +126,29 @@ public class BFS {
                     coList.add(co);
                     n1.setOutgoing(coList);
                     grafNiewazony.add(n1);
-                    System.out.println(n1.getId() + " " + n1.getName() + " " + n1.getOutgoing().toString() + n1.getNodeType());
+                    //System.out.println(n1.getId() + " " + n1.getName() + " " + n1.getOutgoing().toString() + n1.getNodeType());  
                 }
-            }
-
+            }            
+            
             n.setOutgoing(glownePolaczenia);
             //grafNiewazony.add(new Node(n.getId(), n.getName(), n.getNodeType(), glownePolaczenia, null));
             grafNiewazony.add(n);
-
-
-
+            
+            
+            
             //System.out.println(n.getId() + " " + n.getName() + " " + n.getOutgoing().toString() + " " + n.getNodeType());
-
-            //}
+        
+        //}
         }
         for (Node nd : grafNiewazony) {
             System.out.println(nd.getId() + " " + nd.getName() + " " + nd.getOutgoing().toString() + " " + nd.getNodeType());
         }
 
-        /*
-        Map<Integer, Node> nodes = Data.getNodesMap(przykladowe);
+        
+        Map<Integer, Node> nodes = Data.getNodesMap(grafNiewazony);
 
         if (nodes == null) {
+            System.out.println("DLACZEGO TO NIE DZIAŁA?");
             return null;
         }
         //ObjectMapper mapper = new ObjectMapper();
@@ -165,6 +170,7 @@ public class BFS {
         if (vs != null) {
             patchNode.add(vs);
         } else {
+            System.out.println("lol2");
             return null;
         }
 
@@ -193,9 +199,14 @@ public class BFS {
                 }
             }
         }
+        for(Connection conn: patchConnection)
+        {
+            System.out.println("1:");
+            System.out.println(conn.toString());
+        }
         if (found) {
             return patchConnection;//TODO
-        }*/
+        }
         return null;
     }
 }
