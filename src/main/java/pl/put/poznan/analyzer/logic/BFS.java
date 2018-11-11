@@ -5,64 +5,103 @@ import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.NodeType;
 
-import javax.swing.text.StyledEditorKit;
 import java.util.*;
 
 public class BFS {
 
     public static List<Connection> run(List<Node> nodesList) {
-
-        Map<Integer, Node> nodes = Data.getNodesMap(nodesList);
-        if (nodes==null){
-            return  null;
+        List<Node> newList= new ArrayList<>();
+        int nodesId = 0;
+        for (Node node : nodesList) {
+            Node newNode = new Node(node.getId(), node.getName(), node.getNodeType());
+            newList.add(newNode);
+            for (Connection con : node.getOutgoing()) {
+                int value = (int) Math.ceil(con.getValue());
+                int id = con.getTo();
+                if (value > 1) {
+                    nodesId -= 1;
+                    Node additional = new Node(nodesId, "Additional", NodeType.REGULAR);
+                    newList.add(additional);
+                    newNode.getOutgoing().add(new Connection(newNode.getId(),nodesId, (float) value));
+                    value -= 1;
+                    if (value <= 1) {
+                        additional.getOutgoing().add(new Connection(additional.getId(), id, (float) value));
+                        break;
+                    } else {
+                        nodesId -= 1;
+                        additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float) value));
+                        while (true) {
+                            Node last =  new Node(nodesId, "Additional", NodeType.REGULAR);
+                            newList.add(last);
+                            value -= 1;
+                            if (value <= 1) {
+                                last.getOutgoing().add(new Connection(last.getId(), id, (float) value));
+                                break;
+                            }else {
+                            last.getOutgoing().add(new Connection(nodesId , nodesId-1, (float) 1));
+                            nodesId -= 1;
+                            }
+                        }
+                    }
+                } else {
+                    newNode.getOutgoing().add(new Connection(newNode.getId(), id, (float) value));
+                }
+            }
         }
 
-        Map<Integer, Boolean> visited=new HashMap<>();
+        System.out.println(newList);
+
+        Map<Integer, Node> nodes = Data.getNodesMap(newList);
+        if (nodes == null) {
+            System.out.println("blad null");
+            return null;
+        }
+
+        Map<Integer, Boolean> visited = new HashMap<>();
         Queue<Node> Q = new PriorityQueue<>();
         // Mape visited zerujemy
-        for(Map.Entry<Integer, Node> entry : nodes.entrySet()){
-            int id=entry.getKey();
+        for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+            int id = entry.getKey();
             visited.putIfAbsent(id, false);
         }
         // Tworzymy tablicę ścieżki
         List<Node> patchNode = new LinkedList<>();
         List<Connection> patchConnection = new LinkedList<>();
 
-        Node vs = Data.getEnterNode(nodes); //wierzchołek startowy
-        if (vs != null) {
-            patchNode.add(vs);
-        }else {
+        Node entry = Data.getEnterNode(nodes); //wierzchołek startowy
+        if (entry != null) {
+            patchNode.add(entry);
+        } else {
             return null;
         }
 
-        Q.add(vs);
-        visited.replace(vs.getId(),true);
+        Q.add(entry);
+        visited.replace(entry.getId(), true);
         Node v;
         int u;
         boolean found = false;
 
-        while(!(Q.isEmpty()) ) {
+        while (!(Q.isEmpty())) {
             v = Q.poll();
             // Pobieramy z kolejki wierzchołek v
-            if(v.getNodeType()== NodeType.EXIT ) {// Sprawdzamy koniec ścieżki
+            if (v.getNodeType() == NodeType.EXIT) {// Sprawdzamy koniec ścieżki
                 found = true;        // Zaznaczamy sukces
                 break;               // Przerywamy pętlę
             }
             // Przeglądamy sąsiadów wierzchołka v
-            for(Connection con: v.getOutgoing()) {
+            for (Connection con : v.getOutgoing()) {
                 u = con.getTo();
-                if(!visited.get(u))
-                {
+                if (!visited.get(u)) {
                     patchConnection.add(con);
                     patchNode.add(nodes.get(u));
                     Q.add(Data.getNodeById(nodes, u));
-                    visited.replace(u,true);
+                    visited.replace(u, true);
                     break;
                 }
             }
         }
-        if (found){
-            return  patchConnection;//TODO
+        if (found) {
+            return patchConnection;//TODO
         }
         return null;
     }

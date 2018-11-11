@@ -7,7 +7,7 @@ public class Connection {
 
     private int from;
     private int to;
-    private Float value;
+    private float value;
 
     public Connection(int from, int to, Float value) {
         this.from = from;
