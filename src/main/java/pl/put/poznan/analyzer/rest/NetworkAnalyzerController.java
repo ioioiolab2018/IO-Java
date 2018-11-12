@@ -29,10 +29,6 @@ public class NetworkAnalyzerController {
     @ResponseStatus(HttpStatus.CREATED)
     public Result findTheBestPathByBFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
-        if (!Data.checkNetwork(nodes)) {
-            logger.error("Incorrect network");
-            throw new IllegalArgumentException("Incorrect network");
-        }
         return networkAnalyzer.findTheBestPath(nodes, "BFS");
     }
 
@@ -40,10 +36,6 @@ public class NetworkAnalyzerController {
     @ResponseStatus(HttpStatus.CREATED)
     public Result findTheBestPathByDFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
-        if (!Data.checkNetwork(nodes)) {
-            logger.error("Incorrect network");
-            throw new IllegalArgumentException("Incorrect network");
-        }
         return networkAnalyzer.findTheBestPath(nodes, "DFS");
     }
 }
