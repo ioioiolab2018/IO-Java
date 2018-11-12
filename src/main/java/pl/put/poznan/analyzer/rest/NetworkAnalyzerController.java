@@ -20,23 +20,13 @@ public class NetworkAnalyzerController {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkAnalyzerController.class);
 
-    @RequestMapping(path = "/test/nodes", method = RequestMethod.GET, produces = "application/json")
-    public List<Connection> get(@RequestParam(name = "nodes") List<Node> nodes) {
-        logger.debug(String.valueOf(nodes));
-        if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
-        }
-        return BFS.run(nodes);
-    }
-
     @RequestMapping(path = "/bfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public List<Connection> findTheBestPathByBFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
         if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
+            logger.error("Incorrect network");
+            throw new IllegalArgumentException("Incorrect network");
         }
         return BFS.run(nodes);
     }
@@ -46,8 +36,8 @@ public class NetworkAnalyzerController {
     public Result findTheBestPathByDFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
         if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
+            logger.error("Incorrect network");
+            throw new IllegalArgumentException("Incorrect network");
         }
         return NetworkAnalyzer.findTheBestPath(nodes, "DFS");
     }

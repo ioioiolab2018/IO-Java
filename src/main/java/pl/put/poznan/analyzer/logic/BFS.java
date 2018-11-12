@@ -53,8 +53,7 @@ public class BFS {
         Map<Integer, Node> network = Data.getNodesMap(nodesList);
         Map<Integer, Node> nodes = Data.getNodesMap(newList);
         if (nodes == null) {
-            System.out.println("Incorrect Network");
-            return null;
+            throw new IllegalStateException("Incorrect network");
         }
 
         Map<Integer, Boolean> visited = new HashMap<>();
