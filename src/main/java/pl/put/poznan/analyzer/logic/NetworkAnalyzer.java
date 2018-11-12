@@ -34,6 +34,6 @@ public class NetworkAnalyzer {
         }
         Map <Integer, Node> nodesMap = Data.getNodesMap(nodeList);
         logger.debug("Prepared to run the algorithm");
-        return mode.equals("BFS") ? bfs.run(nodeList).getResult() : dfs.run(nodesMap).getResult();
+        return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
     }
 }
