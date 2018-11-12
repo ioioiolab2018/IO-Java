@@ -114,7 +114,7 @@ public class BFS {
                 }
             }
             Collections.reverse(resultPath);
-            return new TemporaryPath(resultPath, 0);
+            return new TemporaryPath(resultPath);
         }
         return null;
     }

@@ -19,9 +19,13 @@ public class TemporaryPath {
         }
     }
 
-    public TemporaryPath(List<Connection> resultList, float value) {
+    public TemporaryPath(List<Connection> resultList) {
         this.resultList = resultList;
-        this.value = value;
+        float sum = 0;
+        for (Connection connection: resultList) {
+            sum += connection.getValue();
+        }
+        this.value = sum;
     }
 
     public List<Connection> getResultList() {
