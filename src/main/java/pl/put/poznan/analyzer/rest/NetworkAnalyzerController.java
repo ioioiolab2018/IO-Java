@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
+import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.logic.BFS;
 import pl.put.poznan.analyzer.logic.NetworkAnalyzer;
 
@@ -37,12 +38,12 @@ public class NetworkAnalyzerController {
             logger.error("Niepoprawna siec");
             throw (new InternalError());
         }
-        return NetworkAnalyzer.findTheBestPath(nodes, "BFS");
+        return BFS.run(nodes);
     }
 
     @RequestMapping(path = "/dfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Connection> findTheBestPathByDFS(@RequestBody List<Node> nodes) {
+    public Result findTheBestPathByDFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
         if (!Data.checkNetwork(nodes)) {
             logger.error("Niepoprawna siec");

@@ -1,30 +1,17 @@
 package pl.put.poznan.analyzer.commons;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Result {
-    private List<Connection> resultList;
     private float value;
+    private ArrayList<Integer> nodes;
 
     public Result() {
-        resultList = new ArrayList<>();
     }
 
-    public Result(Result result) {
-        value = result.value;
-        resultList = new ArrayList<>();
-        for (Connection connection : result.getResultList()) {
-            resultList.add(new Connection(connection));
-        }
-    }
-
-    public List<Connection> getResultList() {
-        return resultList;
-    }
-
-    public void setResultList(List<Connection> resultList) {
-        this.resultList = resultList;
+    public Result(float value, ArrayList<Integer> nodes) {
+        this.value = value;
+        this.nodes = nodes;
     }
 
     public float getValue() {
@@ -35,14 +22,11 @@ public class Result {
         this.value = value;
     }
 
-    public void add(Connection connection) {
-        value += connection.getValue();
-        resultList.add(connection);
+    public ArrayList<Integer> getNodes() {
+        return nodes;
     }
 
-    public void remove(Connection connection) {
-        if (resultList.remove(connection)) {
-            value -= connection.getValue();
-        }
+    public void setNodes(ArrayList<Integer> nodes) {
+        this.nodes = nodes;
     }
 }

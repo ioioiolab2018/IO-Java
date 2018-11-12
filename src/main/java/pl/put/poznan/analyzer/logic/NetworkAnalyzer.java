@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
+import pl.put.poznan.analyzer.commons.Result;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class NetworkAnalyzer {
     public NetworkAnalyzer() {
     }
 
-    public static List<Connection> findTheBestPath(List<Node> nodeList, String mode) {
+    public static Result findTheBestPath(List<Node> nodeList, String mode) {
         Map <Integer, Node> nodesMap = Data.getNodesMap(nodeList);
-        return mode.equals("BFS") ? BFS.run(nodeList) : DFS.run(nodesMap);
+        return mode.equals("BFS") ? null : DFS.run(nodesMap).getResult();
     }
 }

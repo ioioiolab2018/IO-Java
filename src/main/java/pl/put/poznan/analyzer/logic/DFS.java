@@ -5,25 +5,25 @@ import pl.put.poznan.analyzer.commons.*;
 import java.util.*;
 
 public class DFS {
-    private static Result connectionPath;
-    private static Result result;
+    private static TemporaryPath connectionPath;
+    private static TemporaryPath result;
     private static Map<Integer, Node> nodeMap;
 
-    public static List<Connection> run(Map<Integer, Node> nodes) {
-        connectionPath = new Result();
+    public static TemporaryPath run(Map<Integer, Node> nodes) {
+        connectionPath = new TemporaryPath();
         nodeMap = nodes;
-        result = new Result();
+        result = new TemporaryPath();
         result.setValue(Float.MAX_VALUE);
 
         dfs(Data.getEnterNode(nodes));
 
-        return result.getResultList();
+        return result;
     }
 
     private static void dfs(Node node) {
         if (node.getNodeType().equals(NodeType.EXIT)) {
             if (connectionPath.getValue() < result.getValue()) {
-                result = new Result(connectionPath);
+                result = new TemporaryPath(connectionPath);
             }
             return;
         }
