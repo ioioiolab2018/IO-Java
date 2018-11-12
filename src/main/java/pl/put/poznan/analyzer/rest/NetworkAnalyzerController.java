@@ -2,15 +2,14 @@ package pl.put.poznan.analyzer.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
-import pl.put.poznan.analyzer.logic.BFS;
-import pl.put.poznan.analyzer.logic.DFS;
+import pl.put.poznan.analyzer.commons.Result;
+import pl.put.poznan.analyzer.logic.NetworkAnalyzer;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -19,38 +18,33 @@ import java.util.List;
 public class NetworkAnalyzerController {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkAnalyzerController.class);
+    private NetworkAnalyzer networkAnalyzer;
 
-    @RequestMapping(path = "/test/nodes", method = RequestMethod.GET, produces = "application/json")
-    public List<Connection> get(@RequestParam(name = "nodes") List<Node> nodes) {
-        logger.debug(String.valueOf(nodes));
-        if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
-        }
-        return BFS.run(nodes);
+    @Autowired
+    public NetworkAnalyzerController(NetworkAnalyzer networkAnalyzer) {
+        this.networkAnalyzer = networkAnalyzer;
     }
 
     @RequestMapping(path = "/bfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Connection> postCon(@RequestBody List<Node> nodes) {
+    public Result findTheBestPathByBFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
         if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
+            logger.error("Incorrect network");
+            throw new IllegalArgumentException("Incorrect network");
         }
-        return BFS.run(nodes);
+        return networkAnalyzer.findTheBestPath(nodes, "BFS");
     }
-
 
     @RequestMapping(path = "/dfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Connection> postConD(@RequestBody List<Node> nodes) {
+    public Result findTheBestPathByDFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
         if (!Data.checkNetwork(nodes)) {
-            logger.error("Niepoprawna siec");
-            throw (new InternalError());
+            logger.error("Incorrect network");
+            throw new IllegalArgumentException("Incorrect network");
         }
-        return DFS.run(nodes);
+        return networkAnalyzer.findTheBestPath(nodes, "DFS");
     }
 }
 

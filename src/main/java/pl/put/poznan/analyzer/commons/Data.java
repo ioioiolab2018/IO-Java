@@ -20,7 +20,7 @@ public class Data {
         Map<Integer, Node> nodesMap = new HashMap<>();
         for (Node node: nodes) {
             if(nodesMap.putIfAbsent(node.getId(), node)!=null){
-                return null;
+                throw new IllegalStateException("A repeating vertex was found!");
             }
         }
         return nodesMap;
@@ -38,7 +38,7 @@ public class Data {
                 return node;
             }
         }
-        return  null;
+        throw new IllegalStateException("The entry node was not found!");
     }
 
     /**
