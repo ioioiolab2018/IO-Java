@@ -1,15 +1,14 @@
 package pl.put.poznan.analyzer.logic;
 
-import pl.put.poznan.analyzer.commons.Connection;
-import pl.put.poznan.analyzer.commons.Data;
-import pl.put.poznan.analyzer.commons.Node;
-import pl.put.poznan.analyzer.commons.NodeType;
+import org.springframework.stereotype.Service;
+import pl.put.poznan.analyzer.commons.*;
 
 import java.util.*;
 
+@Service
 public class BFS {
 
-    public static List<Connection> run(List<Node> nodesList) {
+    public TemporaryPath run(List<Node> nodesList) {
         List<Node> newList = new ArrayList<>();
         int nodesId = 0;
         for (Node node : nodesList) {
@@ -115,7 +114,7 @@ public class BFS {
                 }
             }
             Collections.reverse(resultPath);
-            return resultPath;
+            return new TemporaryPath(resultPath, 0);
         }
         return null;
     }

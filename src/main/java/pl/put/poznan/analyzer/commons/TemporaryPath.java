@@ -19,6 +19,11 @@ public class TemporaryPath {
         }
     }
 
+    public TemporaryPath(List<Connection> resultList, float value) {
+        this.resultList = resultList;
+        this.value = value;
+    }
+
     public List<Connection> getResultList() {
         return resultList;
     }

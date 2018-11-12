@@ -1,15 +1,17 @@
 package pl.put.poznan.analyzer.logic;
 
+import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
 import java.util.*;
 
+@Service
 public class DFS {
-    private static TemporaryPath connectionPath;
-    private static TemporaryPath result;
-    private static Map<Integer, Node> nodeMap;
+    private TemporaryPath connectionPath;
+    private TemporaryPath result;
+    private Map<Integer, Node> nodeMap;
 
-    public static TemporaryPath run(Map<Integer, Node> nodes) {
+    public TemporaryPath run(Map<Integer, Node> nodes) {
         connectionPath = new TemporaryPath();
         nodeMap = nodes;
         result = new TemporaryPath();
@@ -20,7 +22,7 @@ public class DFS {
         return result;
     }
 
-    private static void dfs(Node node) {
+    private void dfs(Node node) {
         if (node.getNodeType().equals(NodeType.EXIT)) {
             if (connectionPath.getValue() < result.getValue()) {
                 result = new TemporaryPath(connectionPath);
