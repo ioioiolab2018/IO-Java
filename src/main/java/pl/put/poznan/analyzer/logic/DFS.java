@@ -11,7 +11,7 @@ public class DFS {
     private TemporaryPath result;
     private Map<Integer, Node> nodeMap;
 
-    public TemporaryPath run(Map<Integer, Node> nodes) {
+    TemporaryPath run(Map<Integer, Node> nodes) {
         connectionPath = new TemporaryPath();
         nodeMap = nodes;
         result = new TemporaryPath();

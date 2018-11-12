@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import pl.put.poznan.analyzer.commons.Connection;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
