@@ -30,8 +30,8 @@ public class Connection {
     }
 
     /**
-     * Class constructor which is used to make a deep copy of the object
-     * @param connection connection from which you want to make deep copy
+     * Class constructor used to make a deep copy of the object
+     * @param connection connection on which you want to make deep copy
      */
     public Connection(Connection connection) {
         from = connection.getFrom();
