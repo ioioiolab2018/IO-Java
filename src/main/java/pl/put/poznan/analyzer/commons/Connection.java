@@ -9,6 +9,15 @@ public class Connection {
     private int to;
     private float value;
 
+    public Connection() {
+    }
+
+    public Connection(Connection connection) {
+        from = connection.getFrom();
+        to = connection.getTo();
+        value = connection.getValue();
+    }
+
     public Connection(int from, int to, Float value) {
         this.from = from;
         this.to = to;
@@ -37,9 +46,6 @@ public class Connection {
 
     public void setValue(Float value) {
         this.value = value;
-    }
-
-    public Connection() {
     }
 
     @Override
