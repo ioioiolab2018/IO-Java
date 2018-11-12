@@ -3,14 +3,30 @@ package pl.put.poznan.analyzer.commons;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Additional class to help with DFS
+ */
 public class TemporaryPath {
+    /**
+     * Current path as list of connections
+     */
     private List<Connection> resultList;
+    /**
+     * Value of the path
+     */
     private float value;
 
+    /**
+     * Empty class constructor
+     */
     public TemporaryPath() {
         resultList = new ArrayList<>();
     }
 
+    /**
+     * Class constructor used to make a deep copy of the object
+     * @param temporaryPath temporary path on which you want to make deep copy
+     */
     public TemporaryPath(TemporaryPath temporaryPath) {
         value = temporaryPath.value;
         resultList = new ArrayList<>();
@@ -19,6 +35,10 @@ public class TemporaryPath {
         }
     }
 
+    /**
+     * Class constructor which calculates value of the path
+     * @param resultList path (list of connections) which you want to save as temporary path
+     */
     public TemporaryPath(List<Connection> resultList) {
         this.resultList = resultList;
         float sum = 0;
@@ -44,17 +64,29 @@ public class TemporaryPath {
         this.value = value;
     }
 
+    /**
+     * Add connection to the current path (and calculate new value of the path)
+     * @param connection connection which you want to add to the path
+     */
     public void add(Connection connection) {
         value += connection.getValue();
         resultList.add(connection);
     }
 
+    /**
+     * Remove connection from the current path (and calculate new value of the path)
+     * @param connection connection which you want to remove from the path
+     */
     public void remove(Connection connection) {
         if (resultList.remove(connection)) {
             value -= connection.getValue();
         }
     }
 
+    /**
+     * Transform path into Result (list of nodes and path's value)
+     * @return path as Result (list of nodes and path's value)
+     */
     public Result getResult() {
         ArrayList<Integer> nodes = new ArrayList<>();
         if (resultList.get(0) != null) {

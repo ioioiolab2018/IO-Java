@@ -26,10 +26,21 @@ public class Data {
         return nodesMap;
     }
 
+    /**
+     * Get a specific node from the network (hashmap) by giving its id
+     * @param nodes network as a hashMap in which wanted node is
+     * @param id id of wanted node
+     * @return wanted node
+     */
     public static Node getNodeById(Map<Integer, Node> nodes, int id) {
         return nodes.get(id);
     }
 
+    /**
+     * Get the entry node from the network (hashmap)
+     * @param nodes network as a hashMap in which wanted node is
+     * @return the entry node
+     */
     public static  Node getEnterNode(Map<Integer,Node> nodes){
 
         for(Map.Entry<Integer, Node> entry : nodes.entrySet()) {
@@ -81,12 +92,11 @@ public class Data {
     }
 
 
-
-
-
-
-
-
+    /**
+     * Get list of all connections from the network (list of nodes)
+     * @param nodes network from which you want to get all connections
+     * @return list of all connections from the network
+     */
     public static List<Connection> getConnections(List<Node> nodes) {
         List<Connection> connections = new ArrayList<>();
         for (Node node : nodes) {
@@ -104,6 +114,11 @@ public class Data {
         return connections;
     }
 
+    /**
+     * Get maximum id from the network (list of nodes)
+     * @param nodes network as a list of nodes from which you want to get maximum id
+     * @return maximum id
+     */
     public static int getMaxId(List<Node> nodes){
         int max =0;
         for (Node node: nodes) {
@@ -114,6 +129,12 @@ public class Data {
         return max;
     }
 
+    /**
+     * Get a specific node from the network (list of nodes) by giving its id
+     * @param nodes network as a list of nodes in which wanted node is
+     * @param id id of wanted node
+     * @return wanted node
+     */
     public static Node getNodeById(List<Node> nodes, int id) {
         for (Node node : nodes) {
             if (node.getId() == id) {
@@ -123,6 +144,11 @@ public class Data {
         throw (new IllegalStateException());
     }
 
+    /**
+     * Get the entry node from the network (list of nodes)
+     * @param nodes nodes network as a list of nodes in which wanted node is
+     * @return entry node
+     */
     public static  Node getEnterNode(List<Node> nodes){
         for (Node node:nodes) {
             if (node.getNodeType()== NodeType.ENTRY){
@@ -177,6 +203,14 @@ public class Data {
         return true;
     }
 
+    /**
+     * Change weighted network to pseudo-not-weighted one. The connections of values greater than 1 are broken
+     * into few smaller connections (where value is interpreted as 1).
+     * In practice, connections where a starting node is from original graph still have original values
+     * (It's specifically made like this to help with finding a value of shortest path in BFS).
+      * @param nodesList network to be transformed into network with connections' values equal to 1
+     * @return network with connections' values equal to 1
+     */
     public static Map<Integer, Node> changeToUnweighted (List<Node> nodesList) {
         List<Node> newList = new ArrayList<>();
         int nodesId = 0;

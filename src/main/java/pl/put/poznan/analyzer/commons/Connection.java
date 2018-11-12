@@ -8,8 +8,19 @@ import java.util.Objects;
 public class Connection {
 
 
+    /**
+     * Node id from which the connection starts
+     */
     private int from;
+
+    /**
+     * Node id in which the connection ends
+     */
     private int to;
+
+    /**
+     * Value of the connection
+     */
     private float value;
 
     /**
@@ -18,6 +29,10 @@ public class Connection {
     public Connection() {
     }
 
+    /**
+     * Class constructor used to make a deep copy of the object
+     * @param connection connection on which you want to make deep copy
+     */
     public Connection(Connection connection) {
         from = connection.getFrom();
         to = connection.getTo();
@@ -26,8 +41,8 @@ public class Connection {
 
     /**
      * Class constructor
-     * @param from node from which the connection starts
-     * @param to node in which the connection ends
+     * @param from node id from which the connection starts
+     * @param to node id in which the connection ends
      * @param value value of the connection
      */
     public Connection(int from, int to, Float value) {
@@ -60,6 +75,10 @@ public class Connection {
         this.value = value;
     }
 
+    /**
+     * Override toString method
+     * @return string with all information about the object
+     */
     @Override
     public String toString() {
         return "Connection{" +
@@ -69,6 +88,12 @@ public class Connection {
                 '}';
     }
 
+    /**
+     * Override equals method
+     * @param o object to compare with
+     * @return TRUE, when objects are identical
+     *      <br>FALSE, when objects are different
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,6 +104,10 @@ public class Connection {
                 Objects.equals(value, that.value);
     }
 
+    /**
+     * Override hashcode method
+     * @return hash code value for the object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(from, to, value);
