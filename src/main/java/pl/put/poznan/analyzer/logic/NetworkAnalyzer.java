@@ -29,6 +29,6 @@ public class NetworkAnalyzer {
 
     public Result findTheBestPath(List<Node> nodeList, String mode) {
         Map <Integer, Node> nodesMap = Data.getNodesMap(nodeList);
-        return mode.equals("BFS") ? bfs.run(nodeList).getResult() : dfs.run(nodesMap).getResult();
+        return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
     }
 }

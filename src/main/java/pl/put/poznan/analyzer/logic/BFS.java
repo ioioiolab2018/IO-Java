@@ -8,49 +8,9 @@ import java.util.*;
 @Service
 public class BFS {
 
-    public TemporaryPath run(List<Node> nodesList) {
-        List<Node> newList = new ArrayList<>();
-        int nodesId = 0;
-        for (Node node : nodesList) {
-            Node newNode = new Node(node.getId(), node.getName(), node.getNodeType());
-            newList.add(newNode);
-            for (Connection con : node.getOutgoing()) {
-                float realValue = con.getValue();
-                int value = (int) Math.ceil(con.getValue());
-                int id = con.getTo();
-                if (value > 1) {
-                    nodesId -= 1;
-                    Node additional = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
-                    newList.add(additional);
-                    newNode.getOutgoing().add(new Connection(newNode.getId(), nodesId, realValue));
-                    value -= 1;
-                    if (value <= 1) {
-                        additional.getOutgoing().add(new Connection(additional.getId(), id, (float) value));
-                    } else {
-                        nodesId -= 1;
-                        additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float) value));
-                        while (true) {
-                            Node last = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
-                            newList.add(last);
-                            value -= 1;
-                            if (value <= 1) {
-                                last.getOutgoing().add(new Connection(last.getId(), id, (float) value));
-                                break;
-                            } else {
-                                last.getOutgoing().add(new Connection(nodesId, nodesId - 1, (float) 1));
-                                nodesId -= 1;
-                            }
-                        }
-                    }
-                } else {
-                    newNode.getOutgoing().add(new Connection(newNode.getId(), id, (float) value));
-                }
-            }
-        }
+    public Result run(List<Node> nodesList) {
 
-
-        Map<Integer, Node> network = Data.getNodesMap(nodesList);
-        Map<Integer, Node> nodes = Data.getNodesMap(newList);
+        Map<Integer, Node> nodes = Data.changeToUnweighted(nodesList);
         if (nodes == null) {
             throw new IllegalStateException("Incorrect network");
         }
@@ -96,25 +56,22 @@ public class BFS {
         }
 
         if (found) {
-            List<Connection> resultPath = new ArrayList<>();
             Collections.reverse(pathConnection);
+            ArrayList<Integer> resultNodesList = new ArrayList<>();
+            resultNodesList.add(exit.getId());
+            float sum = 0;
             Node currentNode = exit;
-            Node varNode;
-            Node pastNode = Data.getNodeById(network, exit.getId());
             for (Connection con : pathConnection) {
                 if (con.getTo() == currentNode.getId()) {
                     currentNode = Data.getNodeById(nodes, con.getFrom());
                     if (currentNode.getId() >= 0) {
-                        varNode = Data.getNodeById(network, con.getFrom());
-                        for (Connection c : varNode.getOutgoing())
-                            if (c.getTo() == pastNode.getId())
-                                resultPath.add(c);
-                        pastNode = currentNode;
+                        resultNodesList.add(currentNode.getId());
+                        sum += con.getValue();
                     }
                 }
             }
-            Collections.reverse(resultPath);
-            return new TemporaryPath(resultPath);
+            Collections.reverse(resultNodesList);
+            return new Result(sum, resultNodesList);
         }
         return null;
     }
