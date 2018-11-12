@@ -20,7 +20,7 @@ public class Data {
         Map<Integer, Node> nodesMap = new HashMap<>();
         for (Node node: nodes) {
             if(nodesMap.putIfAbsent(node.getId(), node)!=null){
-                return null;
+                throw new IllegalStateException("A repeating vertex was found!");
             }
         }
         return nodesMap;
@@ -38,7 +38,7 @@ public class Data {
                 return node;
             }
         }
-        return  null;
+        throw new IllegalStateException("The entry node was not found!");
     }
 
     /**
@@ -177,5 +177,47 @@ public class Data {
         return true;
     }
 
+    public static Map<Integer, Node> changeToUnweighted (List<Node> nodesList) {
+        List<Node> newList = new ArrayList<>();
+        int nodesId = 0;
+        for (Node node : nodesList) {
+            Node newNode = new Node(node.getId(), node.getName(), node.getNodeType());
+            newList.add(newNode);
+            for (Connection con : node.getOutgoing()) {
+                float realValue = con.getValue();
+                int value = (int) Math.ceil(con.getValue());
+                int id = con.getTo();
+                if (value > 1) {
+                    nodesId -= 1;
+                    Node additional = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
+                    newList.add(additional);
+                    newNode.getOutgoing().add(new Connection(newNode.getId(), nodesId, realValue));
+                    value -= 1;
+                    if (value <= 1) {
+                        additional.getOutgoing().add(new Connection(additional.getId(), id, (float)1));
+                    } else {
+                        nodesId -= 1;
+                        additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float)1));
+                        while (true) {
+                            Node last = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
+                            newList.add(last);
+                            value -= 1;
+                            if (value <= 1) {
+                                last.getOutgoing().add(new Connection(last.getId(), id, (float) 1));
+                                break;
+                            } else {
+                                last.getOutgoing().add(new Connection(nodesId, nodesId - 1, (float) 1));
+                                nodesId -= 1;
+                            }
+                        }
+                    }
+                } else {
+                    newNode.getOutgoing().add(new Connection(newNode.getId(), id, realValue));
+                }
+            }
+        }
+
+        return Data.getNodesMap(newList);
+    }
 
 }

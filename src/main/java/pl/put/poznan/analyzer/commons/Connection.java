@@ -10,7 +10,19 @@ public class Connection {
 
     private int from;
     private int to;
-    private Float value;
+    private float value;
+
+    /**
+     * Empty class constructor
+     */
+    public Connection() {
+    }
+
+    public Connection(Connection connection) {
+        from = connection.getFrom();
+        to = connection.getTo();
+        value = connection.getValue();
+    }
 
     /**
      * Class constructor
@@ -46,12 +58,6 @@ public class Connection {
 
     public void setValue(Float value) {
         this.value = value;
-    }
-
-    /**
-     * Empty class constructor
-     */
-    public Connection() {
     }
 
     @Override
