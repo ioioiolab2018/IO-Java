@@ -1,5 +1,7 @@
 package pl.put.poznan.analyzer.logic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
@@ -7,6 +9,7 @@ import java.util.*;
 
 @Service
 public class DFS {
+    private static final Logger logger = LoggerFactory.getLogger(DFS.class);
     private TemporaryPath connectionPath;
     private TemporaryPath result;
     private Map<Integer, Node> nodeMap;
@@ -18,6 +21,7 @@ public class DFS {
         result.setValue(Float.MAX_VALUE);
 
         dfs(Data.getEnterNode(nodes));
+        logger.debug("The operation of the algorithm has been completed");
 
         return result;
     }
