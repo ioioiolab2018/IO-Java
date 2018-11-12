@@ -9,14 +9,26 @@ import java.util.Objects;
  */
 public class Node {
 
+    /**
+     * identifier number (id) of the node
+     */
     private int id;
+    /**
+     * optional description of the node
+     */
     private String name;
+    /**
+     * type of the node, it can be ENTRY, EXIT, REGULAR or extra type ADDITIONAL
+     */
     private NodeType nodeType;
+    /**
+     * list of outgoing connections from the node
+     */
     private List<Connection> outgoing;
+    /**
+     * list of incoming connections to the node
+     */
     private List<Connection> incoming;
-
-
-    // setters getters
 
 
     /**
@@ -48,6 +60,8 @@ public class Node {
         this.outgoing = new ArrayList<>();
         this.incoming = new ArrayList<>();
     }
+
+    // setters getters
 
     public int getId() {
         return id;
@@ -95,6 +109,12 @@ public class Node {
     public Node() {
     }
 
+    /**
+     * Override equals method
+     * @param o object to compare with
+     * @return TRUE, when objects are identical
+     *      <br>FALSE, when objects are different
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,11 +123,19 @@ public class Node {
         return Objects.equals(id, node.id);
     }
 
+    /**
+      * Override hashcode method
+      * @return hash code value for the object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, name, nodeType, outgoing, incoming);
     }
 
+    /**
+     * Override toString method
+     * @return string with all information about the object
+     */
     @Override
     public String toString() {
         return "Node{" +

@@ -8,9 +8,20 @@ import pl.put.poznan.analyzer.commons.*;
 import java.util.*;
 
 @Service
+/**
+ * This class is used to find the most profitable path from entry to exit using BFS algorithm.
+ */
 public class BFS {
     private static final Logger logger = LoggerFactory.getLogger(BFS.class);
 
+    /**
+     * Find the most profitable path by using BFS algorithm.
+     * <br> Method uses pseudo-not-weighted network (made from original network) where every connection value is
+     * interpreted as 1, so the method searches for the shortest path.
+     * @param nodesList network in which you want to find the most profitable path
+     * @return the most profitable path as Result (list of nodes and path's value)
+     * <br> or NULL if path can't be found
+     */
     public Result run(List<Node> nodesList) {
 
         Map<Integer, Node> nodes = Data.changeToUnweighted(nodesList);

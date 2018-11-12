@@ -4,6 +4,9 @@ package pl.put.poznan.analyzer.commons;
  * Available types of nodes
  */
 public enum NodeType {
+    /**
+     * An extra node with negative number as id, it's used only in unweighted network (which is used in BFS).
+     */
     ADDITIONAL,
     /**
      * A node where network starts, doesn't have any incoming connections.
