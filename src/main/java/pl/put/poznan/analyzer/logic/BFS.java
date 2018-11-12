@@ -1,5 +1,7 @@
 package pl.put.poznan.analyzer.logic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
@@ -7,6 +9,7 @@ import java.util.*;
 
 @Service
 public class BFS {
+    private static final Logger logger = LoggerFactory.getLogger(BFS.class);
 
     public Result run(List<Node> nodesList) {
 
@@ -71,6 +74,7 @@ public class BFS {
                 }
             }
             Collections.reverse(resultNodesList);
+            logger.debug("The operation of the algorithm has been completed");
             return new Result(sum, resultNodesList);
         }
         return null;

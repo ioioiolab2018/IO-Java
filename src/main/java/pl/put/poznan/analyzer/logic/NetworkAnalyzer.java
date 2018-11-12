@@ -28,7 +28,12 @@ public class NetworkAnalyzer {
     }
 
     public Result findTheBestPath(List<Node> nodeList, String mode) {
+        if (!Data.checkNetwork(nodeList)) {
+            logger.error("Incorrect network");
+            throw new IllegalArgumentException("Incorrect network");
+        }
         Map <Integer, Node> nodesMap = Data.getNodesMap(nodeList);
+        logger.debug("Prepared to run the algorithm");
         return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
     }
 }
