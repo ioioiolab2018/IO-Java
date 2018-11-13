@@ -1,2 +1,11 @@
-language: Java
+language: java
 jdk: oraclejdk8
+deploy:
+  provider: releases
+  api_key:
+    secure: $GITHUB_TOKEN
+  file_glob: true
+  file: target/*.jar
+  skip_cleanup: true
+  on:
+    tags: true
