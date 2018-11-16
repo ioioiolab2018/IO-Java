@@ -47,7 +47,7 @@ public class NetworkAnalyzerController {
 
     @RequestMapping(path = "/getNetwork/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Node> getNetwork(@PathVariable int id) {
+    public String getNetwork(@PathVariable int id) {
         logger.debug(String.valueOf(id));
         return networkAnalyzer.getNetwork(id);
     }

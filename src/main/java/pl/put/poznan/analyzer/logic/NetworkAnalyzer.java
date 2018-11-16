@@ -71,12 +71,12 @@ public class NetworkAnalyzer {
         return network.getId();
     }
 
-    public List<Node> getNetwork(int id) {
+    public String getNetwork(int id) {
         Network network = networkJsonRepository.findOne(id);
         if (network == null) {
             throw new IllegalArgumentException("Incorrect id");
         }
-        return nodeListConverter.convert(network.getJsonValue());
+        return network.getJsonValue();
     }
 
     public void deleteNetworkFromDatabase(int id) {
