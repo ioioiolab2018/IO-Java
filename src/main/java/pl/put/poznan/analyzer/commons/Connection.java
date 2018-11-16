@@ -31,6 +31,7 @@ public class Connection {
 
     /**
      * Class constructor used to make a deep copy of the object
+     *
      * @param connection connection on which you want to make deep copy
      */
     public Connection(Connection connection) {
@@ -41,8 +42,9 @@ public class Connection {
 
     /**
      * Class constructor
-     * @param from node id from which the connection starts
-     * @param to node id in which the connection ends
+     *
+     * @param from  node id from which the connection starts
+     * @param to    node id in which the connection ends
      * @param value value of the connection
      */
     public Connection(int from, int to, Float value) {
@@ -77,6 +79,7 @@ public class Connection {
 
     /**
      * Override toString method
+     *
      * @return string with all information about the object
      */
     @Override
@@ -90,9 +93,10 @@ public class Connection {
 
     /**
      * Override equals method
+     *
      * @param o object to compare with
      * @return TRUE, when objects are identical
-     *      <br>FALSE, when objects are different
+     * <br>FALSE, when objects are different
      */
     @Override
     public boolean equals(Object o) {
@@ -106,6 +110,7 @@ public class Connection {
 
     /**
      * Override hashcode method
+     *
      * @return hash code value for the object
      */
     @Override

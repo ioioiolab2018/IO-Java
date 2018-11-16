@@ -18,6 +18,7 @@ public class BFS {
      * Find the most profitable path by using BFS algorithm.
      * <br> Method uses pseudo-not-weighted network (made from original network) where every connection value is
      * interpreted as 1, so the method searches for the shortest path.
+     *
      * @param nodesList network (list of nodes) in which you want to find the most profitable path
      * @return the most profitable path as Result (list of nodes and path's value)
      * <br> or NULL if path can't be found

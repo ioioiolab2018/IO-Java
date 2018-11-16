@@ -23,6 +23,7 @@ public class Result {
 
     /**
      * Class constructor
+     *
      * @param value total value of the shortest path
      * @param nodes list of nodes from the shortest path
      */
