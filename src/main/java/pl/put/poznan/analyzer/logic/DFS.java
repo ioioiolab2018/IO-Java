@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
-import java.util.*;
+import java.util.Map;
 
 @Service
 /**
@@ -15,7 +15,7 @@ public class DFS {
     private static final Logger logger = LoggerFactory.getLogger(DFS.class);
 
     /**
-     * Current path 
+     * Current path
      */
     private TemporaryPath connectionPath;
     /**
@@ -30,6 +30,7 @@ public class DFS {
     /**
      * Find the most profitable path by using DFS algorithm.
      * <br> Method uses recursion.
+     *
      * @param nodes network (hashmap) in which you want to find the most profitable path
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
@@ -48,6 +49,7 @@ public class DFS {
 
     /**
      * Recursive function for DFS
+     *
      * @param node node from which you go deeper into network
      */
     private void dfs(Node node) {

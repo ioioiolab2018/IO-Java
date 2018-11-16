@@ -25,6 +25,7 @@ public class TemporaryPath {
 
     /**
      * Class constructor used to make a deep copy of the object
+     *
      * @param temporaryPath temporary path on which you want to make deep copy
      */
     public TemporaryPath(TemporaryPath temporaryPath) {
@@ -37,12 +38,13 @@ public class TemporaryPath {
 
     /**
      * Class constructor which calculates value of the path
+     *
      * @param resultList path (list of connections) which you want to save as temporary path
      */
     public TemporaryPath(List<Connection> resultList) {
         this.resultList = resultList;
         float sum = 0;
-        for (Connection connection: resultList) {
+        for (Connection connection : resultList) {
             sum += connection.getValue();
         }
         this.value = sum;
@@ -66,6 +68,7 @@ public class TemporaryPath {
 
     /**
      * Add connection to the current path (and calculate new value of the path)
+     *
      * @param connection connection which you want to add to the path
      */
     public void add(Connection connection) {
@@ -75,6 +78,7 @@ public class TemporaryPath {
 
     /**
      * Remove connection from the current path (and calculate new value of the path)
+     *
      * @param connection connection which you want to remove from the path
      */
     public void remove(Connection connection) {
@@ -85,6 +89,7 @@ public class TemporaryPath {
 
     /**
      * Transform path into Result (list of nodes and path's value)
+     *
      * @return path as Result (list of nodes and path's value)
      */
     public Result getResult() {
