@@ -76,6 +76,10 @@ public class NetworkAnalyzer {
         if (network == null) {
             throw new IllegalArgumentException("Incorrect id");
         }
-        return nodeListConverter.convert(network.getNetworkJson());
+        return nodeListConverter.convert(network.getJsonValue());
+    }
+
+    public void deleteNetworkFromDatabase(int id) {
+        networkJsonRepository.delete(id);
     }
 }

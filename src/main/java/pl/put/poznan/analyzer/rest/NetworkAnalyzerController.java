@@ -40,7 +40,7 @@ public class NetworkAnalyzerController {
 
     @RequestMapping(path = "/saveNetwork", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public int addNewNetwork(@RequestBody String nodesJson) {
+    public int saveNetwork(@RequestBody String nodesJson) {
         logger.debug(nodesJson);
         return networkAnalyzer.saveNetworkOnDatabase(nodesJson);
     }
@@ -50,6 +50,13 @@ public class NetworkAnalyzerController {
     public List<Node> getNetwork(@PathVariable int id) {
         logger.debug(String.valueOf(id));
         return networkAnalyzer.getNetwork(id);
+    }
+
+    @RequestMapping(path = "/deleteNetwork/{id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void deleteNetwork(@PathVariable int id) {
+        logger.debug(String.valueOf(id));
+        networkAnalyzer.deleteNetworkFromDatabase(id);
     }
 
 }
