@@ -8,6 +8,7 @@ import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
+import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkJsonRepository;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public class NetworkAnalyzer {
 
     private final NetworkJsonRepository networkJsonRepository;
 
+    private final NodeListConverter nodeListConverter;
+
     /**
      * Class constructor for spring
      *
@@ -37,10 +40,11 @@ public class NetworkAnalyzer {
      * @param dfs instance of DFS to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkJsonRepository networkJsonRepository) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkJsonRepository networkJsonRepository, NodeListConverter nodeListConverter) {
         this.bfs = bfs;
         this.dfs = dfs;
         this.networkJsonRepository = networkJsonRepository;
+        this.nodeListConverter = nodeListConverter;
     }
 
     /**
@@ -61,9 +65,17 @@ public class NetworkAnalyzer {
         return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
     }
 
-    public int addNetwork(String nodes) {
+    public Network addNetwork(String nodes) {
         Network network = new Network(nodes);
         networkJsonRepository.save(network);
-        return network.getId();
+        return network;
+    }
+
+    public List<Node> getNetwork(int id) {
+        Network network = networkJsonRepository.findOne(id);
+        if (network == null) {
+            throw new IllegalArgumentException("Incorrect id");
+        }
+        return nodeListConverter.convert(network.getNetworkJson());
     }
 }

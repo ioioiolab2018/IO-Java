@@ -29,4 +29,7 @@ public class Network {
     public Network(String networkJson) {
         this.networkJson = networkJson;
     }
+
+    public Network() {
+    }
 }
