@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import pl.put.poznan.analyzer.commons.Network;
 
 @Repository
-public interface NetworkJsonRepository extends CrudRepository<Network, Integer> {
+public interface NetworkRepository extends CrudRepository<Network, Integer> {
 
 }

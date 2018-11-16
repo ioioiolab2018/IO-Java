@@ -9,7 +9,7 @@ import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.converter.NodeListConverter;
-import pl.put.poznan.analyzer.repositories.NetworkJsonRepository;
+import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class NetworkAnalyzer {
      */
     private final DFS dfs;
 
-    private final NetworkJsonRepository networkJsonRepository;
+    private final NetworkRepository networkJsonRepository;
 
     private final NodeListConverter nodeListConverter;
 
@@ -40,7 +40,7 @@ public class NetworkAnalyzer {
      * @param dfs instance of DFS to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkJsonRepository networkJsonRepository, NodeListConverter nodeListConverter) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkJsonRepository, NodeListConverter nodeListConverter) {
         this.bfs = bfs;
         this.dfs = dfs;
         this.networkJsonRepository = networkJsonRepository;
@@ -65,10 +65,10 @@ public class NetworkAnalyzer {
         return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
     }
 
-    public Network addNetwork(String nodes) {
+    public int saveNetworkOnDatabase(String nodes) {
         Network network = new Network(nodes);
         networkJsonRepository.save(network);
-        return network;
+        return network.getId();
     }
 
     public List<Node> getNetwork(int id) {
