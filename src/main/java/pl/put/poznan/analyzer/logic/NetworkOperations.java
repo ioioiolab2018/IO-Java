@@ -57,6 +57,15 @@ public class NetworkOperations {
                             .collect(Collectors.toList()));
                 } else {
                     oldNodeMap.put(nodeEntry.getKey(), nodeEntry.getValue());
+                    node = nodeEntry.getValue();
+                    node.getIncoming()
+                            .forEach(connection -> Data.getNodeById(oldNodeMap, connection.getFrom())
+                                    .getOutgoing()
+                                    .add(connection));
+                    node.getOutgoing()
+                            .forEach(connection -> Data.getNodeById(oldNodeMap, connection.getTo())
+                                    .getIncoming()
+                                    .add(connection));
                 }
             }
             if (!Data.checkNetwork(oldNodeMap)) {
