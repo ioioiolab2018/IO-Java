@@ -82,6 +82,13 @@ public class NetworkAnalyzer {
         networkRepository.delete(id);
     }
 
+    /**
+     * Add Nodes and Connection between Nodes to network which is saved in the database
+     *
+     * @param id Network identifier which is stored in the database
+     * @param nodes List of Nodes and Connections to be added
+     * @return Modified List of Nodes
+     */
     public List<Node> addNodesToNetwork(int id, List<Node> nodes) {
         return networkOperations.addNodesToNetwork(id, nodes);
     }
