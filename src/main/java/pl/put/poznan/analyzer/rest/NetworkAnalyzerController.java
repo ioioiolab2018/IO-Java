@@ -59,6 +59,13 @@ public class NetworkAnalyzerController {
         networkAnalyzer.deleteNetworkFromDatabase(id);
     }
 
+    @RequestMapping(path = "/addNodes/{id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Node> addNodesToNetwork(@PathVariable int id, @RequestBody List<Node> nodes) {
+        logger.debug(String.valueOf(id) + ": " + String.valueOf(nodes));
+        return networkAnalyzer.addNodesToNetwork(id, nodes);
+    }
+
 }
 
 

@@ -8,7 +8,6 @@ import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
-import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;
@@ -29,9 +28,9 @@ public class NetworkAnalyzer {
      */
     private final DFS dfs;
 
-    private final NetworkRepository networkJsonRepository;
+    private final NetworkRepository networkRepository;
 
-    private final NodeListConverter nodeListConverter;
+    private final NetworkOperations networkOperations;
 
     /**
      * Class constructor for spring
@@ -40,11 +39,11 @@ public class NetworkAnalyzer {
      * @param dfs instance of DFS to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkJsonRepository, NodeListConverter nodeListConverter) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkRepository, NetworkOperations networkOperations) {
         this.bfs = bfs;
         this.dfs = dfs;
-        this.networkJsonRepository = networkJsonRepository;
-        this.nodeListConverter = nodeListConverter;
+        this.networkRepository = networkRepository;
+        this.networkOperations = networkOperations;
     }
 
     /**
@@ -67,12 +66,12 @@ public class NetworkAnalyzer {
 
     public int saveNetworkOnDatabase(String nodes) {
         Network network = new Network(nodes);
-        networkJsonRepository.save(network);
+        networkRepository.save(network);
         return network.getId();
     }
 
     public String getNetwork(int id) {
-        Network network = networkJsonRepository.findOne(id);
+        Network network = networkRepository.findOne(id);
         if (network == null) {
             throw new IllegalArgumentException("Incorrect id");
         }
@@ -80,6 +79,10 @@ public class NetworkAnalyzer {
     }
 
     public void deleteNetworkFromDatabase(int id) {
-        networkJsonRepository.delete(id);
+        networkRepository.delete(id);
+    }
+
+    public List<Node> addNodesToNetwork(int id, List<Node> nodes) {
+        return networkOperations.addNodesToNetwork(id, nodes);
     }
 }
