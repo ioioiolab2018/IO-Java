@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.put.poznan.analyzer.commons.Data;
-import pl.put.poznan.analyzer.commons.Network;
-import pl.put.poznan.analyzer.commons.Node;
-import pl.put.poznan.analyzer.commons.Result;
+import pl.put.poznan.analyzer.commons.*;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;
@@ -85,11 +82,22 @@ public class NetworkAnalyzer {
     /**
      * Add Nodes and Connection between Nodes to network which is saved in the database
      *
-     * @param id Network identifier which is stored in the database
+     * @param id    Network identifier which is stored in the database
      * @param nodes List of Nodes and Connections to be added
      * @return Modified List of Nodes
      */
     public List<Node> addNodesToNetwork(int id, List<Node> nodes) {
         return networkOperations.addNodesToNetwork(id, nodes);
+    }
+
+    /**
+     * Add Connections between Nodes to network which is saved in the database
+     *
+     * @param id          Network identifier which is stored in the database
+     * @param connections List of Connections to be added to the Network
+     * @return Modified Network
+     */
+    public List<Node> addConnectionsToNetwork(int id, List<Connection> connections) {
+        return networkOperations.addConnectionsToNetwork(id, connections);
     }
 }

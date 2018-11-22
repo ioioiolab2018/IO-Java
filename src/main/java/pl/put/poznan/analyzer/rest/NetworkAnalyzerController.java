@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.logic.NetworkAnalyzer;
@@ -66,6 +67,12 @@ public class NetworkAnalyzerController {
         return networkAnalyzer.addNodesToNetwork(id, nodes);
     }
 
+    @RequestMapping(path = "/addConnections/{id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Node> addConnectionsToNetwork(@PathVariable int id, @RequestBody List<Connection> connections) {
+        logger.debug(String.valueOf(id) + ": " + String.valueOf(connections));
+        return networkAnalyzer.addConnectionsToNetwork(id, connections);
+    }
 }
 
 

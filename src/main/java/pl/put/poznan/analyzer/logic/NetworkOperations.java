@@ -58,7 +58,7 @@ public class NetworkOperations {
      * Add Nodes and Connection between Nodes to network which is saved in the database
      *
      * @param id    Network identifier which is stored in the database
-     * @param nodes List of Nodes and Connections to be added
+     * @param nodes List of Nodes and Connections to be added to the Network
      * @return Modified List of Nodes
      */
     public List<Node> addNodesToNetwork(int id, List<Node> nodes) {
@@ -100,7 +100,32 @@ public class NetworkOperations {
     }
 
     /**
-     * @param nodes Map of Nodes on the Network
+     * Add Connections between Nodes to network which is saved in the database
+     *
+     * @param id          Network identifier which is stored in the database
+     * @param connections List of Connections to be added to the Network
+     * @return Modified Network
+     */
+    public List<Node> addConnectionsToNetwork(Integer id, List<Connection> connections) {
+        Network network = networkRepository.findOne(id);
+
+        if (network != null) {
+            List<Node> temp = mapStringToNodeList(network.getJsonValue());
+            Map<Integer, Node> nodeMap = Data.getNodesMap(temp);
+
+            addConnections(nodeMap, connections);
+
+            List<Node> newNetwork = new ArrayList<>(nodeMap.values());
+            network.setJsonValue(mapNodeListToJSON(newNetwork));
+            networkRepository.save(network);
+            return newNetwork;
+        }
+
+        throw new IllegalStateException("There is no network with the given id");
+    }
+
+    /**
+     * @param nodes       Map of Nodes on the Network
      * @param connections List of Connection to be added
      */
     private void addConnections(Map<Integer, Node> nodes, List<Connection> connections) {
