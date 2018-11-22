@@ -14,6 +14,7 @@ import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -131,14 +132,20 @@ public class NetworkOperations {
     private void addConnections(Map<Integer, Node> nodes, List<Connection> connections) {
         connections.forEach(connection -> {
             Node node = Data.getNodeById(nodes, connection.getFrom());
-            if (node.getOutgoing().contains(connection)) {
-                node.getOutgoing().add(connection);
-            }
+            node.setOutgoing(
+                    Stream.concat(
+                            node.getOutgoing().stream(),
+                            Stream.of(connection))
+                            .distinct()
+                            .collect(Collectors.toList()));
 
             node = Data.getNodeById(nodes, connection.getTo());
-            if (node.getIncoming().add(connection)) {
-                node.getIncoming().add(connection);
-            }
+            node.setIncoming(
+                    Stream.concat(
+                            node.getIncoming().stream(),
+                            Stream.of(connection))
+                            .distinct()
+                            .collect(Collectors.toList()));
         });
     }
 
