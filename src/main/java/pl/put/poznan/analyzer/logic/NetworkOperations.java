@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
@@ -56,7 +57,7 @@ public class NetworkOperations {
     /**
      * Add Nodes and Connection between Nodes to network which is saved in the database
      *
-     * @param id Network identifier which is stored in the database
+     * @param id    Network identifier which is stored in the database
      * @param nodes List of Nodes and Connections to be added
      * @return Modified List of Nodes
      */
@@ -71,30 +72,19 @@ public class NetworkOperations {
 
             for (Map.Entry<Integer, Node> nodeEntry : nodeMap.entrySet()) {
                 Node node = oldNodeMap.get(nodeEntry.getKey());
-                if (node != null) {
-                    node.setIncoming(Stream
-                            .concat(node.getIncoming().stream(),
-                                    nodeEntry.getValue().getIncoming().stream()
-                            ).distinct()
-                            .collect(Collectors.toList()));
-                    node.setOutgoing(Stream
-                            .concat(node.getOutgoing().stream(),
-                                    nodeEntry.getValue().getOutgoing().stream()
-                            ).distinct()
-                            .collect(Collectors.toList()));
-                } else {
+
+                if (node == null) {
                     oldNodeMap.put(nodeEntry.getKey(), nodeEntry.getValue());
                     node = nodeEntry.getValue();
-                    node.getIncoming()
-                            .forEach(connection -> Data.getNodeById(oldNodeMap, connection.getFrom())
-                                    .getOutgoing()
-                                    .add(connection));
-                    node.getOutgoing()
-                            .forEach(connection -> Data.getNodeById(oldNodeMap, connection.getTo())
-                                    .getIncoming()
-                                    .add(connection));
                 }
+
+                addConnections(
+                        oldNodeMap,
+                        Stream.concat(node.getIncoming().stream(), node.getOutgoing().stream())
+                                .distinct()
+                                .collect(Collectors.toList()));
             }
+
             if (!Data.checkNetwork(oldNodeMap)) {
                 logger.error("Incorrect network");
                 throw new IllegalArgumentException("Incorrect network");
@@ -107,6 +97,24 @@ public class NetworkOperations {
         }
 
         throw new IllegalStateException("There is no network with the given id");
+    }
+
+    /**
+     * @param nodes Map of Nodes on the Network
+     * @param connections List of Connection to be added
+     */
+    private void addConnections(Map<Integer, Node> nodes, List<Connection> connections) {
+        connections.forEach(connection -> {
+            Node node = Data.getNodeById(nodes, connection.getFrom());
+            if (node.getOutgoing().contains(connection)) {
+                node.getOutgoing().add(connection);
+            }
+
+            node = Data.getNodeById(nodes, connection.getTo());
+            if (node.getIncoming().add(connection)) {
+                node.getIncoming().add(connection);
+            }
+        });
     }
 
     /**
