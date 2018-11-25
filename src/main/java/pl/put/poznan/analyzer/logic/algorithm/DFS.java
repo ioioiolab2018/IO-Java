@@ -1,4 +1,4 @@
-package pl.put.poznan.analyzer.logic;
+package pl.put.poznan.analyzer.logic.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,11 +7,11 @@ import pl.put.poznan.analyzer.commons.*;
 
 import java.util.Map;
 
-@Service
 /**
  * This class is used to find the most profitable path from entry to exit using DFS algorithm.
  */
-public class DFS {
+@Service
+public class DFS implements Algorithm {
     private static final Logger logger = LoggerFactory.getLogger(DFS.class);
 
     /**
@@ -35,7 +35,7 @@ public class DFS {
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
      */
-    TemporaryPath run(Map<Integer, Node> nodes) {
+    public Result run(Map<Integer, Node> nodes) {
         connectionPath = new TemporaryPath();
         nodeMap = nodes;
         result = new TemporaryPath();
@@ -44,7 +44,7 @@ public class DFS {
         dfs(Data.getEnterNode(nodes));
         logger.debug("The operation of the algorithm has been completed");
 
-        return result;
+        return result.getResult();
     }
 
     /**

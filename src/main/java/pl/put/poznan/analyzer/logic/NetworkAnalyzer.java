@@ -9,6 +9,9 @@ import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.converter.NodeListConverter;
+import pl.put.poznan.analyzer.logic.algorithm.Algorithm;
+import pl.put.poznan.analyzer.logic.algorithm.BFS;
+import pl.put.poznan.analyzer.logic.algorithm.DFS;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;
@@ -23,11 +26,11 @@ public class NetworkAnalyzer {
     /**
      * Instance of BFS class, which is used to find the best path in network using BFS algorithm
      */
-    private final BFS bfs;
+    private final Algorithm bfs;
     /**
      * Instance of DFS class, which is used to find the best path in network using DFS algorithm
      */
-    private final DFS dfs;
+    private final Algorithm dfs;
 
     private final NetworkRepository networkJsonRepository;
 
@@ -62,7 +65,7 @@ public class NetworkAnalyzer {
         }
         Map<Integer, Node> nodesMap = Data.getNodesMap(nodeList);
         logger.debug("Prepared to run the algorithm");
-        return mode.equals("BFS") ? bfs.run(nodeList) : dfs.run(nodesMap).getResult();
+        return mode.equals("BFS") ? bfs.run(nodesMap) : dfs.run(nodesMap);
     }
 
     public int saveNetworkOnDatabase(String nodes) {
