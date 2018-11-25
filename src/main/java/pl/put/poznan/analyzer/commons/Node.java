@@ -109,6 +109,14 @@ public class Node {
     public Node() {
     }
 
+    public Node(int id, String name, NodeType nodeType, List<Connection> outgoing, List<Connection> incoming) {
+        this.id = id;
+        this.name = name;
+        this.nodeType = nodeType;
+        this.outgoing = outgoing;
+        this.incoming = incoming;
+    }
+
     /**
      * Override equals method
      * @param o object to compare with

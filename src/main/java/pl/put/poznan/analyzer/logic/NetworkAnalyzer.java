@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.put.poznan.analyzer.commons.Connection;
 import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
