@@ -19,13 +19,14 @@ public class BFS implements Algorithm{
      * <br> Method uses pseudo-not-weighted network (made from original network) where every connection value is
      * interpreted as 1, so the method searches for the shortest path.
      *
-     * @param nodes network (map of nodes) in which you want to find the most profitable path
+     * @param nodesList network (map of nodes) in which you want to find the most profitable path
      * @return the most profitable path as Result (list of nodes and path's value)
      * <br> or NULL if path can't be found
      */
     @Override
-    public Result run(Map<Integer, Node> nodes) {
+    public Result run(List<Node> nodesList) {
 
+        Map<Integer, Node> nodes = Data.changeToUnweighted(nodesList);
         if (nodes == null) {
             throw new IllegalStateException("Incorrect network");
         }

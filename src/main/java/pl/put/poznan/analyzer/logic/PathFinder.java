@@ -5,7 +5,7 @@ import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.logic.algorithm.Algorithm;
 
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class PathFinder {
@@ -15,7 +15,7 @@ public class PathFinder {
         this.algorithm = algorithm;
     }
 
-    public Result findPath(Map<Integer, Node> nodeMap) {
+    public Result findPath(List<Node> nodeMap) {
         return algorithm.run(nodeMap);
     }
 }

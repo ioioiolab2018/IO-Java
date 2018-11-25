@@ -8,12 +8,10 @@ import pl.put.poznan.analyzer.commons.Data;
 import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
-import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.logic.algorithm.*;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is a service for REST and is responsible for calling functions
@@ -60,9 +58,8 @@ public class NetworkAnalyzer {
             logger.error("Incorrect network");
             throw new IllegalArgumentException("Incorrect network");
         }
-        Map<Integer, Node> nodesMap = Data.getNodesMap(nodeList);
         logger.debug("Prepared to run the algorithm");
-        return pathFinder.findPath(nodesMap);
+        return pathFinder.findPath(nodeList);
     }
 
     public Result findTheBestPathByBFS(List<Node> nodeList) {

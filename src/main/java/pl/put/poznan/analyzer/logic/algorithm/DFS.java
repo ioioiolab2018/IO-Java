@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is used to find the most profitable path from entry to exit using DFS algorithm.
@@ -36,13 +38,13 @@ public class DFS implements Algorithm {
      * <br> or NULL if path can't be found
      */
     @Override
-    public Result run(Map<Integer, Node> nodes) {
+    public Result run(List<Node> nodes) {
         connectionPath = new TemporaryPath();
-        nodeMap = nodes;
+        nodeMap = Data.getNodesMap(nodes);
         result = new TemporaryPath();
         result.setValue(Float.MAX_VALUE);
 
-        dfs(Data.getEnterNode(nodes));
+        dfs(Objects.requireNonNull(Data.getEnterNode(nodes)));
         logger.debug("The operation of the algorithm has been completed");
 
         return result.getResult();
