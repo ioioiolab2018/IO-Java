@@ -23,6 +23,7 @@ public class BFS implements Algorithm{
      * @return the most profitable path as Result (list of nodes and path's value)
      * <br> or NULL if path can't be found
      */
+    @Override
     public Result run(Map<Integer, Node> nodes) {
 
         if (nodes == null) {

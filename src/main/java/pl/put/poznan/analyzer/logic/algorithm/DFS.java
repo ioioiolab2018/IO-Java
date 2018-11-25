@@ -35,6 +35,7 @@ public class DFS implements Algorithm {
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
      */
+    @Override
     public Result run(Map<Integer, Node> nodes) {
         connectionPath = new TemporaryPath();
         nodeMap = nodes;
