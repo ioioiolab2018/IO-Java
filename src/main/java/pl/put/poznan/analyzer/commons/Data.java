@@ -56,6 +56,23 @@ public class Data {
     }
 
     /**
+     * Get the exit node from the network (hashmap)
+     *
+     * @param nodes network as a hashMap in which wanted node is
+     * @return the exit node
+     */
+    public static Node getExitNode(Map<Integer, Node> nodes) {
+
+        for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+            Node node = entry.getValue();
+            if (node.getNodeType() == NodeType.EXIT) {
+                return node;
+            }
+        }
+        throw new IllegalStateException("The entry node was not found!");
+    }
+
+    /**
      * Checks validity of the network (when given network is a hashMap),
      * which consists of:
      * <br>- checking if there is only one entry node

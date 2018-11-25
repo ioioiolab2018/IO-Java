@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.put.poznan.analyzer.commons.Connection;
-import pl.put.poznan.analyzer.commons.Data;
-import pl.put.poznan.analyzer.commons.Network;
-import pl.put.poznan.analyzer.commons.Node;
+import pl.put.poznan.analyzer.commons.*;
 import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
@@ -77,6 +74,12 @@ public class NetworkOperations {
                 if (node == null) {
                     oldNodeMap.put(nodeEntry.getKey(), nodeEntry.getValue());
                     node = nodeEntry.getValue();
+
+                    if (node.getNodeType().equals(NodeType.ENTRY)) {
+                        Data.getEnterNode(oldNodeMap).setNodeType(NodeType.REGULAR);
+                    } else if (node.getNodeType().equals(NodeType.EXIT)) {
+                        Data.getExitNode(oldNodeMap).setNodeType(NodeType.REGULAR);
+                    }
                 }
 
                 addConnections(
