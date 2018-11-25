@@ -119,6 +119,11 @@ public class NetworkOperations {
 
             addConnections(nodeMap, connections);
 
+            if (!Data.checkNetwork(nodeMap)) {
+                logger.error("Incorrect network");
+                throw new IllegalArgumentException("Incorrect network");
+            }
+
             List<Node> newNetwork = new ArrayList<>(nodeMap.values());
             network.setJsonValue(mapNodeListToJSON(newNetwork));
             networkRepository.save(network);
