@@ -32,7 +32,7 @@ public class NetworkAnalyzer {
 
     private final NetworkRepository networkJsonRepository;
 
-    private final NodeListConverter nodeListConverter;
+    private final PathFinder pathFinder;
 
     /**
      * Class constructor for spring
@@ -41,29 +41,38 @@ public class NetworkAnalyzer {
      * @param dfs instance of DFS to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkJsonRepository, NodeListConverter nodeListConverter) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkJsonRepository, PathFinder pathFinder) {
         this.bfs = bfs;
         this.dfs = dfs;
         this.networkJsonRepository = networkJsonRepository;
-        this.nodeListConverter = nodeListConverter;
+        this.pathFinder = pathFinder;
     }
 
     /**
      * Find the most profitable path in the network
      *
      * @param nodeList network (list of nodes) in which you want to find the best path
-     * @param mode     name of algorithm you want to use for searching for the best path
      * @return the best path as Result (list of nodes and path's value)
      * <br> or NULL if path can't be found
      */
-    public Result findTheBestPath(List<Node> nodeList, String mode) {
+    private Result findTheBestPath(List<Node> nodeList) {
         if (!Data.checkNetwork(nodeList)) {
             logger.error("Incorrect network");
             throw new IllegalArgumentException("Incorrect network");
         }
         Map<Integer, Node> nodesMap = Data.getNodesMap(nodeList);
         logger.debug("Prepared to run the algorithm");
-        return mode.equals("BFS") ? bfs.run(nodesMap) : dfs.run(nodesMap);
+        return pathFinder.findPath(nodesMap);
+    }
+
+    public Result findTheBestPathByBFS(List<Node> nodeList) {
+        pathFinder.setAlgorithm(bfs);
+        return findTheBestPath(nodeList);
+    }
+
+    public Result findTheBestPathByDFS(List<Node> nodeList) {
+        pathFinder.setAlgorithm(dfs);
+        return findTheBestPath(nodeList);
     }
 
     public int saveNetworkOnDatabase(String nodes) {

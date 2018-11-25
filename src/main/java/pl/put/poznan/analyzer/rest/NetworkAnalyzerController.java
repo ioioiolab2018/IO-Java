@@ -28,14 +28,14 @@ public class NetworkAnalyzerController {
     @ResponseStatus(HttpStatus.CREATED)
     public Result findTheBestPathByBFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
-        return networkAnalyzer.findTheBestPath(nodes, "BFS");
+        return networkAnalyzer.findTheBestPathByBFS(nodes);
     }
 
     @RequestMapping(path = "/dfs/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Result findTheBestPathByDFS(@RequestBody List<Node> nodes) {
         logger.debug(String.valueOf(nodes));
-        return networkAnalyzer.findTheBestPath(nodes, "DFS");
+        return networkAnalyzer.findTheBestPathByDFS(nodes);
     }
 
     @RequestMapping(path = "/saveNetwork", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
