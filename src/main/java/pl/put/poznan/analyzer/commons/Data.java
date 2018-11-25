@@ -35,7 +35,11 @@ public class Data {
      * @return wanted node
      */
     public static Node getNodeById(Map<Integer, Node> nodes, int id) {
-        return nodes.get(id);
+        Node node = nodes.get(id);
+        if (node == null) {
+            throw new IllegalStateException("There is no node with the given id");
+        }
+        return node;
     }
 
     /**

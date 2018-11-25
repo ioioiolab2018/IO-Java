@@ -140,6 +140,9 @@ public class NetworkOperations {
     private void addConnections(Map<Integer, Node> nodes, List<Connection> connections) {
         connections.forEach(connection -> {
             Node node = Data.getNodeById(nodes, connection.getFrom());
+            if (node.getNodeType().equals(NodeType.EXIT)) {
+                throw new IllegalStateException("It isn't allowed to add an outgoing connection to the exit node!");
+            }
             node.setOutgoing(
                     Stream.concat(
                             node.getOutgoing().stream(),
@@ -148,6 +151,9 @@ public class NetworkOperations {
                             .collect(Collectors.toList()));
 
             node = Data.getNodeById(nodes, connection.getTo());
+            if (node.getNodeType().equals(NodeType.ENTRY)) {
+                throw new IllegalStateException("It isn't allowed to add an incoming connection to the entry node!");
+            }
             node.setIncoming(
                     Stream.concat(
                             node.getIncoming().stream(),
