@@ -9,9 +9,7 @@ import pl.put.poznan.analyzer.commons.Network;
 import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.commons.Result;
 import pl.put.poznan.analyzer.converter.NodeListConverter;
-import pl.put.poznan.analyzer.logic.algorithm.Algorithm;
-import pl.put.poznan.analyzer.logic.algorithm.BFS;
-import pl.put.poznan.analyzer.logic.algorithm.DFS;
+import pl.put.poznan.analyzer.logic.algorithm.*;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.List;

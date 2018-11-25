@@ -23,7 +23,7 @@ public class DFS implements Algorithm {
      */
     private TemporaryPath result;
     /**
-     * Network as hashmap
+     * Network as HashMap
      */
     private Map<Integer, Node> nodeMap;
 
@@ -31,7 +31,7 @@ public class DFS implements Algorithm {
      * Find the most profitable path by using DFS algorithm.
      * <br> Method uses recursion.
      *
-     * @param nodes network (hashmap) in which you want to find the most profitable path
+     * @param nodes network (HashMap) in which you want to find the most profitable path
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
      */
