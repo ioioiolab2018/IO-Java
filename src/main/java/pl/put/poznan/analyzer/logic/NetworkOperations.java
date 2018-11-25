@@ -163,6 +163,103 @@ public class NetworkOperations {
         });
     }
 
+
+    /**
+     * Delete Nodes from the network saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param nodes List of Nodes and Connections to be added to the Network
+     * @return Modified List of Nodes
+     */
+    public List<Node> deleteNodesFromNetwork(int id, List<Node> nodes) {
+        Network network = networkRepository.findOne(id);
+
+        if (network != null) {
+            List<Node> nodeMap = mapStringToNodeList(network.getJsonValue());
+
+            for (Node node : nodes) {
+                try {
+                    Node temp = Data.getNodeById(nodeMap, node.getId());
+                    deleteNode(nodeMap, temp);
+                }
+
+                //deleting non existent node
+                catch (IllegalStateException e) {
+                }
+
+            }
+
+            if (!Data.checkNetwork(nodeMap)) {
+                logger.error("Incorrect network");
+                throw new IllegalArgumentException("Incorrect network");
+            }
+
+            network.setJsonValue(mapNodeListToJSON(nodeMap));
+            networkRepository.save(network);
+            return nodeMap;
+        }
+
+        throw new IllegalStateException("There is no network with the given id");
+    }
+
+    /**
+     * Delete Connections from the network saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param connections List of Connections to be removed from the Network
+     * @return Modified List of Nodes
+     */
+    public List<Node> deleteConnectionsFromNetwork(int id, List<Connection> connections) {
+        Network network = networkRepository.findOne(id);
+
+        if (network != null) {
+            List<Node> nodeMap = mapStringToNodeList(network.getJsonValue());
+            Node temp;
+            for (Connection connection : connections) {
+                //TODO: check if connection exists (why can't i just do try catch)
+                temp = Data.getNodeById(nodeMap, connection.getFrom());
+                temp.getOutgoing().remove(connection);
+                temp = Data.getNodeById(nodeMap, connection.getTo());
+                temp.getIncoming().remove(connection);
+            }
+
+            if (!Data.checkNetwork(nodeMap)) {
+                logger.error("Incorrect network");
+                throw new IllegalArgumentException("Incorrect network");
+            }
+
+            network.setJsonValue(mapNodeListToJSON(nodeMap));
+            networkRepository.save(network);
+            return nodeMap;
+        }
+
+        throw new IllegalStateException("There is no network with the given id");
+    }
+
+    /**
+     * Delete all information about Node from the network
+     *
+     * @param nodeMap network (list of Nodes) from which the node is going to be removed
+     * @param removed node to be removed
+     */
+    private void deleteNode(List<Node> nodeMap, Node removed) {
+
+
+        //TODO: check if connection exists
+        for (Connection connection : removed.getIncoming()) {
+            Node temp = Data.getNodeById(nodeMap, connection.getFrom());
+            temp.getOutgoing().remove(connection);
+        }
+
+        for (Connection connection : removed.getOutgoing()) {
+            Node temp = Data.getNodeById(nodeMap, connection.getTo());
+            temp.getIncoming().remove(connection);
+        }
+
+        nodeMap.remove(removed);
+    }
+
+
     /**
      * @param json JSON value represents List of Nodes
      * @return Converted value

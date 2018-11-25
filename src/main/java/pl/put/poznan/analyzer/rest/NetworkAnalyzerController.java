@@ -73,6 +73,20 @@ public class NetworkAnalyzerController {
         logger.debug(String.valueOf(id) + ": " + String.valueOf(connections));
         return networkAnalyzer.addConnectionsToNetwork(id, connections);
     }
+
+    @RequestMapping(path = "/deleteNodes/{id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Node> deleteNodesFromNetwork(@PathVariable int id, @RequestBody List<Node> nodes) {
+        logger.debug(String.valueOf(id) + ": " + String.valueOf(nodes));
+        return networkAnalyzer.deleteNodesFromNetwork(id, nodes);
+    }
+
+    @RequestMapping(path = "/deleteConnections/{id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Node> deleteConnectionsFromNetwork(@PathVariable int id, @RequestBody List<Connection> connections) {
+        logger.debug(String.valueOf(id) + ": " + String.valueOf(connections));
+        return networkAnalyzer.deleteConnectionsFromNetwork(id, connections);
+    }
 }
 
 
