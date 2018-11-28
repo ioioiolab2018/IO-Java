@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.put.poznan.analyzer.commons.Data;
-import pl.put.poznan.analyzer.commons.Network;
-import pl.put.poznan.analyzer.commons.Node;
-import pl.put.poznan.analyzer.commons.Result;
+import pl.put.poznan.analyzer.commons.*;
 import pl.put.poznan.analyzer.logic.algorithm.*;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
@@ -28,7 +25,9 @@ public class NetworkAnalyzer {
      */
     private final Algorithm dfs;
 
-    private final NetworkRepository networkJsonRepository;
+    private final NetworkRepository networkRepository;
+
+    private final NetworkOperations networkOperations;
 
     private final PathFinder pathFinder;
 
@@ -39,10 +38,11 @@ public class NetworkAnalyzer {
      * @param dfs instance of DFS to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkJsonRepository, PathFinder pathFinder) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkRepository, NetworkOperations networkOperations, PathFinder pathFinder) {
         this.bfs = bfs;
         this.dfs = dfs;
-        this.networkJsonRepository = networkJsonRepository;
+        this.networkRepository = networkRepository;
+        this.networkOperations = networkOperations;
         this.pathFinder = pathFinder;
     }
 
@@ -74,12 +74,12 @@ public class NetworkAnalyzer {
 
     public int saveNetworkOnDatabase(String nodes) {
         Network network = new Network(nodes);
-        networkJsonRepository.save(network);
+        networkRepository.save(network);
         return network.getId();
     }
 
     public String getNetwork(int id) {
-        Network network = networkJsonRepository.findOne(id);
+        Network network = networkRepository.findOne(id);
         if (network == null) {
             throw new IllegalArgumentException("Incorrect id");
         }
@@ -87,6 +87,28 @@ public class NetworkAnalyzer {
     }
 
     public void deleteNetworkFromDatabase(int id) {
-        networkJsonRepository.delete(id);
+        networkRepository.delete(id);
+    }
+
+    /**
+     * Add Nodes and Connection between Nodes to network which is saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param nodes List of Nodes and Connections to be added
+     * @return Modified List of Nodes
+     */
+    public List<Node> addNodesToNetwork(int id, List<Node> nodes) {
+        return networkOperations.addNodesToNetwork(id, nodes);
+    }
+
+    /**
+     * Add Connections between Nodes to network which is saved in the database
+     *
+     * @param id          Network identifier which is stored in the database
+     * @param connections List of Connections to be added to the Network
+     * @return Modified Network
+     */
+    public List<Node> addConnectionsToNetwork(int id, List<Connection> connections) {
+        return networkOperations.addConnectionsToNetwork(id, connections);
     }
 }

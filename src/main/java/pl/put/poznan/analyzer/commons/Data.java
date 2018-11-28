@@ -35,7 +35,11 @@ public class Data {
      * @return wanted node
      */
     public static Node getNodeById(Map<Integer, Node> nodes, int id) {
-        return nodes.get(id);
+        Node node = nodes.get(id);
+        if (node == null) {
+            throw new IllegalStateException("There is no node with the given id");
+        }
+        return node;
     }
 
     /**
@@ -49,6 +53,23 @@ public class Data {
         for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
             if (node.getNodeType() == NodeType.ENTRY) {
+                return node;
+            }
+        }
+        throw new IllegalStateException("The entry node was not found!");
+    }
+
+    /**
+     * Get the exit node from the network (hashmap)
+     *
+     * @param nodes network as a hashMap in which wanted node is
+     * @return the exit node
+     */
+    public static Node getExitNode(Map<Integer, Node> nodes) {
+
+        for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+            Node node = entry.getValue();
+            if (node.getNodeType() == NodeType.EXIT) {
                 return node;
             }
         }
