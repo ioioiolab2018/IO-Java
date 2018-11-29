@@ -109,6 +109,21 @@ public class Connection {
     }
 
     /**
+     * Extra equals method (for networks where between two nodes can be only one connection)
+     *
+     * @param o object to compare with
+     * @return TRUE, when connections have the same 'from' and 'to'
+     * <br>FALSE, when objects are different
+     */
+    public boolean isEqual(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Connection that = (Connection) o;
+        return Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to);
+    }
+
+    /**
      * Override hashcode method
      *
      * @return hash code value for the object

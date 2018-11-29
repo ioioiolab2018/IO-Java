@@ -11,7 +11,6 @@ import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -162,6 +161,100 @@ public class NetworkOperations {
                             .collect(Collectors.toList()));
         });
     }
+
+
+    /**
+     * Delete Nodes from the network saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param nodes List of Nodes and Connections to be deleted from the Network
+     * @return Modified List of Nodes
+     */
+    public List<Node> deleteNodesFromNetwork(int id, List<Node> nodes) {
+        Network network = networkRepository.findOne(id);
+
+        if (network != null) {
+            List<Node> tempList = mapStringToNodeList(network.getJsonValue());
+            Map <Integer, Node> nodeMap = Data.getNodesMap(tempList);
+
+            for (Node node : nodes) {
+                Node deleting = nodeMap.get(node.getId());
+                if (deleting == null) continue;
+
+                for (Connection connection : deleting.getIncoming()) {
+                    Node temp = nodeMap.get(connection.getFrom());
+                    temp.getOutgoing().remove(connection);
+                }
+
+                for (Connection connection : deleting.getOutgoing()) {
+                    Node temp = nodeMap.get(connection.getTo());
+                    temp.getIncoming().remove(connection);
+                }
+
+                nodeMap.remove(deleting.getId());
+            }
+
+            if (!Data.checkNetwork(nodeMap)) {
+                logger.error("Incorrect network");
+                throw new IllegalArgumentException("Incorrect network");
+            }
+
+            List<Node> newNetwork = new ArrayList<>(nodeMap.values());
+            network.setJsonValue(mapNodeListToJSON(newNetwork));
+            networkRepository.save(network);
+            return newNetwork;
+        }
+
+        throw new IllegalStateException("There is no network with the given id");
+    }
+
+    /**
+     * Delete Connections from the network saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param connections List of Connections to be removed from the Network
+     * @return Modified List of Nodes
+     */
+    public List<Node> deleteConnectionsFromNetwork(int id, List<Connection> connections) {
+        Network network = networkRepository.findOne(id);
+
+        if (network != null) {
+            List<Node> tempList = mapStringToNodeList(network.getJsonValue());
+            Map<Integer, Node> nodeMap = Data.getNodesMap(tempList);
+
+
+            for (Connection connection : connections) {
+                Node temp = nodeMap.get(connection.getFrom());
+                if(temp != null) {
+                    temp.setOutgoing(
+                            temp.getOutgoing().stream()
+                                    .filter(c -> !(c.isEqual(connection)))
+                                    .collect(Collectors.toList()));
+                }
+                temp = nodeMap.get(connection.getTo());
+                if(temp != null) {
+                    temp.setIncoming(
+                            temp.getIncoming().stream()
+                                    .filter(c -> !(c.isEqual(connection)))
+                                    .collect(Collectors.toList()));
+                }
+            }
+
+            if (!Data.checkNetwork(nodeMap)) {
+                logger.error("Incorrect network");
+                throw new IllegalArgumentException("Incorrect network");
+            }
+
+            List<Node> newNetwork = new ArrayList<>(nodeMap.values());
+            network.setJsonValue(mapNodeListToJSON(newNetwork));
+            networkRepository.save(network);
+            return newNetwork;
+        }
+
+        throw new IllegalStateException("There is no network with the given id");
+    }
+
+
 
     /**
      * @param json JSON value represents List of Nodes

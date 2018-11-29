@@ -109,4 +109,26 @@ public class NetworkAnalyzer {
     public List<Node> addConnectionsToNetwork(int id, List<Connection> connections) {
         return networkOperations.addConnectionsToNetwork(id, connections);
     }
+
+    /**
+     * Delete Nodes from the network which is saved in the database
+     *
+     * @param id    Network identifier which is stored in the database
+     * @param nodes List of Nodes to be deleted
+     * @return Modified Network
+     */
+    public List<Node> deleteNodesFromNetwork(int id, List<Node> nodes) {
+        return networkOperations.deleteNodesFromNetwork(id, nodes);
+    }
+
+    /**
+     * Delete Connections from network which is saved in the database
+     *
+     * @param id          Network identifier which is stored in the database
+     * @param connections List of Connections to be added to the Network
+     * @return Modified Network
+     */
+    public List<Node> deleteConnectionsFromNetwork(int id, List<Connection> connections) {
+        return networkOperations.deleteConnectionsFromNetwork(id, connections);
+    }
 }
