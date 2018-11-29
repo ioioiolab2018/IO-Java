@@ -11,7 +11,6 @@ import pl.put.poznan.analyzer.converter.NodeListConverter;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -168,25 +167,31 @@ public class NetworkOperations {
      * Delete Nodes from the network saved in the database
      *
      * @param id    Network identifier which is stored in the database
-     * @param nodes List of Nodes and Connections to be added to the Network
+     * @param nodes List of Nodes and Connections to be deleted from the Network
      * @return Modified List of Nodes
      */
     public List<Node> deleteNodesFromNetwork(int id, List<Node> nodes) {
         Network network = networkRepository.findOne(id);
 
         if (network != null) {
-            List<Node> nodeMap = mapStringToNodeList(network.getJsonValue());
+            List<Node> tempList = mapStringToNodeList(network.getJsonValue());
+            Map <Integer, Node> nodeMap = Data.getNodesMap(tempList);
 
             for (Node node : nodes) {
-                try {
-                    Node temp = Data.getNodeById(nodeMap, node.getId());
-                    deleteNode(nodeMap, temp);
+                Node deleting = nodeMap.get(node.getId());
+                if (deleting == null) continue;
+
+                for (Connection connection : deleting.getIncoming()) {
+                    Node temp = nodeMap.get(connection.getFrom());
+                    temp.getOutgoing().remove(connection);
                 }
 
-                //deleting non existent node
-                catch (IllegalStateException e) {
+                for (Connection connection : deleting.getOutgoing()) {
+                    Node temp = nodeMap.get(connection.getTo());
+                    temp.getIncoming().remove(connection);
                 }
 
+                nodeMap.remove(deleting.getId());
             }
 
             if (!Data.checkNetwork(nodeMap)) {
@@ -194,9 +199,10 @@ public class NetworkOperations {
                 throw new IllegalArgumentException("Incorrect network");
             }
 
-            network.setJsonValue(mapNodeListToJSON(nodeMap));
+            List<Node> newNetwork = new ArrayList<>(nodeMap.values());
+            network.setJsonValue(mapNodeListToJSON(newNetwork));
             networkRepository.save(network);
-            return nodeMap;
+            return newNetwork;
         }
 
         throw new IllegalStateException("There is no network with the given id");
@@ -213,14 +219,25 @@ public class NetworkOperations {
         Network network = networkRepository.findOne(id);
 
         if (network != null) {
-            List<Node> nodeMap = mapStringToNodeList(network.getJsonValue());
-            Node temp;
+            List<Node> tempList = mapStringToNodeList(network.getJsonValue());
+            Map<Integer, Node> nodeMap = Data.getNodesMap(tempList);
+
+
             for (Connection connection : connections) {
-                //TODO: check if connection exists (why can't i just do try catch)
-                temp = Data.getNodeById(nodeMap, connection.getFrom());
-                temp.getOutgoing().remove(connection);
-                temp = Data.getNodeById(nodeMap, connection.getTo());
-                temp.getIncoming().remove(connection);
+                Node temp = nodeMap.get(connection.getFrom());
+                if(temp != null) {
+                    temp.setOutgoing(
+                            temp.getOutgoing().stream()
+                                    .filter(c -> !(c.isEqual(connection)))
+                                    .collect(Collectors.toList()));
+                }
+                temp = nodeMap.get(connection.getTo());
+                if(temp != null) {
+                    temp.setIncoming(
+                            temp.getIncoming().stream()
+                                    .filter(c -> !(c.isEqual(connection)))
+                                    .collect(Collectors.toList()));
+                }
             }
 
             if (!Data.checkNetwork(nodeMap)) {
@@ -228,36 +245,15 @@ public class NetworkOperations {
                 throw new IllegalArgumentException("Incorrect network");
             }
 
-            network.setJsonValue(mapNodeListToJSON(nodeMap));
+            List<Node> newNetwork = new ArrayList<>(nodeMap.values());
+            network.setJsonValue(mapNodeListToJSON(newNetwork));
             networkRepository.save(network);
-            return nodeMap;
+            return newNetwork;
         }
 
         throw new IllegalStateException("There is no network with the given id");
     }
 
-    /**
-     * Delete all information about Node from the network
-     *
-     * @param nodeMap network (list of Nodes) from which the node is going to be removed
-     * @param removed node to be removed
-     */
-    private void deleteNode(List<Node> nodeMap, Node removed) {
-
-
-        //TODO: check if connection exists
-        for (Connection connection : removed.getIncoming()) {
-            Node temp = Data.getNodeById(nodeMap, connection.getFrom());
-            temp.getOutgoing().remove(connection);
-        }
-
-        for (Connection connection : removed.getOutgoing()) {
-            Node temp = Data.getNodeById(nodeMap, connection.getTo());
-            temp.getIncoming().remove(connection);
-        }
-
-        nodeMap.remove(removed);
-    }
 
 
     /**
