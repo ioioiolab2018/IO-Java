@@ -33,7 +33,7 @@ public class DFS implements Algorithm {
      * Find the most profitable path by using DFS algorithm.
      * <br> Method uses recursion.
      *
-     * @param nodes network (HashMap) in which you want to find the most profitable path
+     * @param nodes network (list of nodes) in which you want to find the most profitable path
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
      */
