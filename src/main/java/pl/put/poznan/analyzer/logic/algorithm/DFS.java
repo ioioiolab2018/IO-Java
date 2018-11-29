@@ -1,21 +1,23 @@
-package pl.put.poznan.analyzer.logic;
+package pl.put.poznan.analyzer.logic.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.analyzer.commons.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-@Service
 /**
  * This class is used to find the most profitable path from entry to exit using DFS algorithm.
  */
-public class DFS {
+@Service
+public class DFS implements Algorithm {
     private static final Logger logger = LoggerFactory.getLogger(DFS.class);
 
     /**
-     * Current path 
+     * Current path
      */
     private TemporaryPath connectionPath;
     /**
@@ -23,31 +25,34 @@ public class DFS {
      */
     private TemporaryPath result;
     /**
-     * Network as hashmap
+     * Network as HashMap
      */
     private Map<Integer, Node> nodeMap;
 
     /**
      * Find the most profitable path by using DFS algorithm.
      * <br> Method uses recursion.
-     * @param nodes network (hashmap) in which you want to find the most profitable path
+     *
+     * @param nodes network (list of nodes) in which you want to find the most profitable path
      * @return the most profitable path as temporary path (list of connections and path's value)
      * <br> or NULL if path can't be found
      */
-    TemporaryPath run(Map<Integer, Node> nodes) {
+    @Override
+    public Result run(List<Node> nodes) {
         connectionPath = new TemporaryPath();
-        nodeMap = nodes;
+        nodeMap = Data.getNodesMap(nodes);
         result = new TemporaryPath();
         result.setValue(Float.MAX_VALUE);
 
-        dfs(Data.getEnterNode(nodes));
+        dfs(Objects.requireNonNull(Data.getEnterNode(nodes)));
         logger.debug("The operation of the algorithm has been completed");
 
-        return result;
+        return result.getResult();
     }
 
     /**
      * Recursive function for DFS
+     *
      * @param node node from which you go deeper into network
      */
     private void dfs(Node node) {

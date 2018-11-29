@@ -1,0 +1,52 @@
+[
+  {
+    "id": 0,
+    "name": "pariatur",
+    "nodeType": "ENTRY",
+    "outgoing": [
+      {
+        "from": 0,
+        "to": 1,
+        "value": 2
+      },
+      {
+        "from": 0,
+        "to": 7,
+        "value": 12
+      }
+    ],
+    "incoming": []
+  },
+  {
+    "id": 7,
+    "name": "nonsensus",
+    "nodeType": "REGULAR",
+    "outgoing": [
+      {
+        "from": 7,
+        "to": 6,
+        "value": 3
+      }
+    ],
+    "incoming": [
+      {
+        "from": 0,
+        "to": 7,
+        "value": 12
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "koniec",
+    "nodeType": "EXIT",
+    "outgoing": [],
+    "incoming": [
+      {
+        "from": 7,
+        "to": 6,
+        "value": 3
+      }
+    ]
+  }
+]

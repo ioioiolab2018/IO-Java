@@ -13,13 +13,14 @@ public class Data {
 
     /**
      * Changes network format from list of nodes to hashMap
+     *
      * @param nodes the network as the list of nodes
      * @return the network as hashMap
      */
-    public static Map<Integer, Node> getNodesMap(List<Node> nodes){
+    public static Map<Integer, Node> getNodesMap(List<Node> nodes) {
         Map<Integer, Node> nodesMap = new HashMap<>();
-        for (Node node: nodes) {
-            if(nodesMap.putIfAbsent(node.getId(), node)!=null){
+        for (Node node : nodes) {
+            if (nodesMap.putIfAbsent(node.getId(), node) != null) {
                 throw new IllegalStateException("A repeating vertex was found!");
             }
         }
@@ -28,8 +29,9 @@ public class Data {
 
     /**
      * Get a specific node from the network (hashmap) by giving its id
+     *
      * @param nodes network as a hashMap in which wanted node is
-     * @param id id of wanted node
+     * @param id    id of wanted node
      * @return wanted node
      */
     public static Node getNodeById(Map<Integer, Node> nodes, int id) {
@@ -37,19 +39,37 @@ public class Data {
         if (node == null) {
             throw new IllegalStateException("There is no node with id=" + id + "!");
         }
-        return nodes.get(id);
+        return node;
     }
 
     /**
      * Get the entry node from the network (hashmap)
+     *
      * @param nodes network as a hashMap in which wanted node is
      * @return the entry node
      */
-    public static  Node getEnterNode(Map<Integer,Node> nodes){
+    public static Node getEnterNode(Map<Integer, Node> nodes) {
 
-        for(Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+        for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
-            if(node.getNodeType()== NodeType.ENTRY){
+            if (node.getNodeType() == NodeType.ENTRY) {
+                return node;
+            }
+        }
+        throw new IllegalStateException("The entry node was not found!");
+    }
+
+    /**
+     * Get the exit node from the network (hashmap)
+     *
+     * @param nodes network as a hashMap in which wanted node is
+     * @return the exit node
+     */
+    public static Node getExitNode(Map<Integer, Node> nodes) {
+
+        for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
+            Node node = entry.getValue();
+            if (node.getNodeType() == NodeType.EXIT) {
                 return node;
             }
         }
@@ -59,15 +79,15 @@ public class Data {
     /**
      * Checks validity of the network (when given network is a hashMap),
      * which consists of:
-     *  <br>- checking if there is only one entry node
-     *  <br>- checking if there is only one exit node
-     *  <br>- checking validity of nodes ids
+     * <br>- checking if there is only one entry node
+     * <br>- checking if there is only one exit node
+     * <br>- checking validity of nodes ids
      *
      * @param nodes the network (as a hashMap) to be checked for validity
      * @return TRUE, when the network is valid
-     *         <br>FALSE, when the network is invalid
+     * <br>FALSE, when the network is invalid
      */
-    public static boolean checkNetwork(Map<Integer,Node> nodes) {
+    public static boolean checkNetwork(Map<Integer, Node> nodes) {
         // Check if there are only one exit and entry
         int entryCount = 0;
         int exitCount = 0;
@@ -98,6 +118,7 @@ public class Data {
 
     /**
      * Get list of all connections from the network (list of nodes)
+     *
      * @param nodes network from which you want to get all connections
      * @return list of all connections from the network
      */
@@ -120,14 +141,15 @@ public class Data {
 
     /**
      * Get maximum id from the network (list of nodes)
+     *
      * @param nodes network as a list of nodes from which you want to get maximum id
      * @return maximum id
      */
-    public static int getMaxId(List<Node> nodes){
-        int max =0;
-        for (Node node: nodes) {
-            if (node.getId()>=max){
-                max=node.getId();
+    public static int getMaxId(List<Node> nodes) {
+        int max = 0;
+        for (Node node : nodes) {
+            if (node.getId() >= max) {
+                max = node.getId();
             }
         }
         return max;
@@ -135,8 +157,9 @@ public class Data {
 
     /**
      * Get a specific node from the network (list of nodes) by giving its id
+     *
      * @param nodes network as a list of nodes in which wanted node is
-     * @param id id of wanted node
+     * @param id    id of wanted node
      * @return wanted node
      */
     public static Node getNodeById(List<Node> nodes, int id) {
@@ -150,27 +173,29 @@ public class Data {
 
     /**
      * Get the entry node from the network (list of nodes)
+     *
      * @param nodes nodes network as a list of nodes in which wanted node is
      * @return entry node
      */
-    public static  Node getEnterNode(List<Node> nodes){
-        for (Node node:nodes) {
-            if (node.getNodeType()== NodeType.ENTRY){
+    public static Node getEnterNode(List<Node> nodes) {
+        for (Node node : nodes) {
+            if (node.getNodeType() == NodeType.ENTRY) {
                 return node;
             }
         }
-        return  null;
+        return null;
     }
 
     /**
      * Checks validity of the network (when given network is a list of nodes)
      * which consists of:
-     *  <br>- checking if there is only one entry node
-     *  <br>- checking if there is only one exit node
-     *  <br>- checking validity of nodes ids
+     * <br>- checking if there is only one entry node
+     * <br>- checking if there is only one exit node
+     * <br>- checking validity of nodes ids
+     *
      * @param nodes the network (as a list of nodes) to be checked for validity
      * @return TRUE, when the network is valid
-     *         <br>FALSE, when the network is invalid
+     * <br>FALSE, when the network is invalid
      */
     public static boolean checkNetwork(List<Node> nodes) {
         //check nodes id
@@ -212,10 +237,11 @@ public class Data {
      * into few smaller connections (where value is interpreted as 1).
      * In practice, connections where a starting node is from original graph still have original values
      * (It's specifically made like this to help with finding a value of shortest path in BFS).
-      * @param nodesList network to be transformed into network with connections' values equal to 1
+     *
+     * @param nodesList network to be transformed into network with connections' values equal to 1
      * @return network with connections' values equal to 1
      */
-    public static Map<Integer, Node> changeToUnweighted (List<Node> nodesList) {
+    public static Map<Integer, Node> changeToUnweighted(List<Node> nodesList) {
         List<Node> newList = new ArrayList<>();
         int nodesId = 0;
         for (Node node : nodesList) {
@@ -232,10 +258,10 @@ public class Data {
                     newNode.getOutgoing().add(new Connection(newNode.getId(), nodesId, realValue));
                     value -= 1;
                     if (value <= 1) {
-                        additional.getOutgoing().add(new Connection(additional.getId(), id, (float)1));
+                        additional.getOutgoing().add(new Connection(additional.getId(), id, (float) 1));
                     } else {
                         nodesId -= 1;
-                        additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float)1));
+                        additional.getOutgoing().add(new Connection(additional.getId(), nodesId, (float) 1));
                         while (true) {
                             Node last = new Node(nodesId, "Additional", NodeType.ADDITIONAL);
                             newList.add(last);
