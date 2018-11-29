@@ -1,4 +1,4 @@
-package pl.put.poznan.analyzer.logic;
+package pl.put.poznan.analyzer.logic.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,11 +7,11 @@ import pl.put.poznan.analyzer.commons.*;
 
 import java.util.*;
 
-@Service
 /**
  * This class is used to find the most profitable path from entry to exit using BFS algorithm.
  */
-public class BFS {
+@Service
+public class BFS implements Algorithm{
     private static final Logger logger = LoggerFactory.getLogger(BFS.class);
 
     /**
@@ -23,6 +23,7 @@ public class BFS {
      * @return the most profitable path as Result (list of nodes and path's value)
      * <br> or NULL if path can't be found
      */
+    @Override
     public Result run(List<Node> nodesList) {
 
         Map<Integer, Node> nodes = Data.changeToUnweighted(nodesList);
