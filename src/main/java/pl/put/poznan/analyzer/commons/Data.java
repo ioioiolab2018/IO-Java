@@ -101,6 +101,15 @@ public class Data {
 
 
             for (Connection con : checkedNode.getIncoming()) {
+                int count=0;
+                for (Connection connection : checkedNode.getIncoming()){
+                    if(connection.isEqual(con)){
+                        count++;
+                    }
+                }
+                if(count > 1){
+                    throw new IllegalStateException("2 or more the same conections");
+                }
                 // Check validity of id in incoming and outgoing connections
                 if (con.getTo() != checkedNode.getId()) {
                     throw new IllegalStateException("Incorrect connection in Incomming");
@@ -116,6 +125,15 @@ public class Data {
             }
 
             for (Connection con : checkedNode.getOutgoing()) {
+                int count=0;
+                for (Connection connection : checkedNode.getOutgoing()){
+                    if(connection.isEqual(con)){
+                        count++;
+                    }
+                }
+                if(count > 1){
+                    throw new IllegalStateException("2 or more the same conections");
+                }
                 // Check validity of id in incoming and outgoing connections
                 if (con.getFrom() != checkedNode.getId()) {
                     throw new IllegalStateException("Incorrect connection in Outgoing");
