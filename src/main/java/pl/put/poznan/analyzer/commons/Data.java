@@ -106,9 +106,13 @@ public class Data {
                     throw new IllegalStateException("Incorrect connection in Incomming");
                 }
                 // Check connection on opposite
-                if( !nodes.get(con.getFrom()).getOutgoing().contains(con)) {
+                if(nodes.get(con.getFrom())==null) {
                     throw new IllegalStateException("No connection in second node");
                 }
+                else{
+                if (!nodes.get(con.getFrom()).getOutgoing().contains(con)) {
+                    throw new IllegalStateException("No connection in second node");
+                }}
             }
 
             for (Connection con : checkedNode.getOutgoing()) {
@@ -117,8 +121,12 @@ public class Data {
                     throw new IllegalStateException("Incorrect connection in Outgoing");
                 }
                 // Check connection on opposite
-                if( !nodes.get(con.getFrom()).getIncoming().contains(con)) {
+                if (nodes.get(con.getTo()) == null) {
                     throw new IllegalStateException("No connection in second node");
+                } else {
+                    if (!nodes.get(con.getTo()).getIncoming().contains(con)) {
+                        throw new IllegalStateException("No connection in second node");
+                    }
                 }
             }
         }
@@ -128,27 +136,27 @@ public class Data {
         if (entryCount > 1) throw new IllegalStateException("There is more than one entry in network");
         if (exitCount > 1) throw new IllegalStateException("There is more than one exit in network");
 
-        if (!findPatch(getEnterNode(nodes),nodes,new HashMap<>()  )) {
+        if (!findPatch(getEnterNode(nodes), nodes, new HashMap<>())) {
             throw new IllegalStateException("There is no patch in network");
         }
 
         return true;
     }
 
-    public static boolean findPatch(Node node, Map<Integer, Node> nodes, Map<Integer, Integer> visited){
-            if (node.getNodeType().equals(NodeType.EXIT)){
-                return true;
-            }
-            List<Connection> neighbours=node.getOutgoing();
-            for (Connection con : neighbours) {
-                if(!visited.containsKey(con.getTo())) {
-                    visited.put(con.getTo(), 1);
-                    if (findPatch(nodes.get(con.getTo()), nodes, visited)) {
-                        return true;
-                    }
+    public static boolean findPatch(Node node, Map<Integer, Node> nodes, Map<Integer, Integer> visited) {
+        if (node.getNodeType().equals(NodeType.EXIT)) {
+            return true;
+        }
+        List<Connection> neighbours = node.getOutgoing();
+        for (Connection con : neighbours) {
+            if (!visited.containsKey(con.getTo())) {
+                visited.put(con.getTo(), 1);
+                if (findPatch(nodes.get(con.getTo()), nodes, visited)) {
+                    return true;
                 }
             }
-            return false;
+        }
+        return false;
     }
 
 
@@ -164,7 +172,7 @@ public class Data {
      * <br>FALSE, when the network is invalid
      */
     public static boolean checkNetwork(List<Node> nodes) {
-       return  checkNetwork(getNodesMap(nodes));
+        return checkNetwork(getNodesMap(nodes));
     }
 
 
@@ -237,7 +245,6 @@ public class Data {
         }
         return null;
     }
-
 
 
     /**
