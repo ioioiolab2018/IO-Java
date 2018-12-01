@@ -126,36 +126,62 @@ class DataTest {
     }
 
     @Test
-    void shouldReturnTrueIfNetworkIsGood() {
-        // when
-        boolean result = Data.checkNetwork(nodeMap);
-
+    void shouldNotThrowWhenNetworkIsGood() {
         // then
-        assertTrue(result);
+        assertDoesNotThrow(() -> Data.checkNetwork(nodeMap));
     }
 
     @Test
-    void shouldReturnFalseIfConnectionFromEntryToExitNotExist() {
-        // given
-        nodeMap.remove(1);
-
-        // when
-        boolean result = Data.checkNetwork(nodeMap);
-
-        // then
-        assertFalse(result);
-    }
-
-    @Test
-    void shouldReturnFalseIfExitNodeNotExist() {
+    void shouldThrowWhenExitNodeNotExist() {
         // given
         nodeMap.remove(2);
 
-        // when
-        boolean result = Data.checkNetwork(nodeMap);
+        // then
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "The entry node was not found!");
+    }
+
+    @Test
+    void shouldThrowWhenExitNodeQuantityIsTwo() {
+        // given
+        nodeMap.put(3, new Node(3,
+                "valhalla",
+                NodeType.EXIT,
+                new ArrayList<>(),
+                Collections.singletonList(
+                        new Connection(1, 3, 1))
+        ));
+        ArrayList<Connection> connections = new ArrayList<>(nodeMap.get(1).getOutgoing());
+        connections.add(new Connection(1, 3, 1));
+        nodeMap.get(1).setOutgoing(connections);
 
         // then
-        assertFalse(result);
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "The entry node was not found!");
+    }
+
+    @Test
+    void shouldThrowWhenNodeRepeats() {
+        // given
+        nodeList.add(new Node(2,
+                "valhalla",
+                NodeType.EXIT,
+                new ArrayList<>(),
+                Collections.singletonList(
+                        new Connection(1, 2, 1))
+        ));
+
+        // then
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "The entry node was not found!");
+    }
+
+    @Test
+    void shouldThrowWhenConnectionRepeats() {
+        // given
+        ArrayList<Connection> connections = new ArrayList<>(nodeMap.get(1).getOutgoing());
+        connections.add(new Connection(1, 2, 8));
+        nodeMap.get(1).setOutgoing(connections);
+
+        // then
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "The entry node was not found!");
     }
 
     @Test
