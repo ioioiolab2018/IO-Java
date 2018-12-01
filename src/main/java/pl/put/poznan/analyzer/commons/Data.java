@@ -37,7 +37,7 @@ public class Data {
     public static Node getNodeById(Map<Integer, Node> nodes, int id) {
         Node node = nodes.get(id);
         if (node == null) {
-            throw new IllegalStateException("There is no node with the given id");
+            throw new IllegalStateException("There is no node with id=" + id + "!");
         }
         return node;
     }
