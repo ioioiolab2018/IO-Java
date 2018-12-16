@@ -101,6 +101,10 @@ public class Data {
 
 
             for (Connection con : checkedNode.getIncoming()) {
+                if(con.getValue() < 0) {
+                    throw new IllegalStateException("Value of the connection is less than 0");
+                }
+
                 int count=0;
                 for (Connection connection : checkedNode.getIncoming()){
                     if(connection.isEqual(con)){
@@ -125,6 +129,9 @@ public class Data {
             }
 
             for (Connection con : checkedNode.getOutgoing()) {
+                if(con.getValue() < 0) {
+                    throw new IllegalStateException("Value of the connection is less than 0");
+                }
                 int count=0;
                 for (Connection connection : checkedNode.getOutgoing()){
                     if(connection.isEqual(con)){
@@ -132,7 +139,7 @@ public class Data {
                     }
                 }
                 if(count > 1){
-                    throw new IllegalStateException("2 or more the same conections");
+                    throw new IllegalStateException("2 or more the same connections");
                 }
                 // Check validity of id in incoming and outgoing connections
                 if (con.getFrom() != checkedNode.getId()) {
@@ -155,7 +162,7 @@ public class Data {
         if (exitCount > 1) throw new IllegalStateException("There is more than one exit in network");
 
         if (!findPatch(getEnterNode(nodes), nodes, new HashMap<>())) {
-            throw new IllegalStateException("There is no patch in network");
+            throw new IllegalStateException("There is no path in network");
         }
 
         return true;
