@@ -185,6 +185,30 @@ class DataTest {
     }
 
     @Test
+    void shouldThrowWhenPathNotExist() {
+        nodeMap.remove(1);
+
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "There is no path in network");
+    }
+
+    @Test
+    void shouldThrowWhenValueIsNegative() {
+
+        nodeMap.remove(1);
+        Node node2 = new Node(1,
+                "nonsensus",
+                NodeType.REGULAR,
+                Collections.singletonList(
+                        new Connection(1, 2, -1)),
+                Collections.singletonList(
+                        new Connection(0, 1, 2)));
+        nodeMap.put(1, node2);
+
+        // then
+        assertThrows(IllegalStateException.class, () -> Data.checkNetwork(nodeMap), "Value of the connection is less than 0");
+    }
+
+    @Test
     void changeToUnweighted() {
         // when
         Map<Integer, Node> result = Data.changeToUnweighted(nodeList);
