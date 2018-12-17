@@ -29,6 +29,12 @@ public class Connection {
     public Connection() {
     }
 
+    public Connection(int from, int to, float value) {
+        this.from = from;
+        this.to = to;
+        this.value = value;
+    }
+
     /**
      * Class constructor used to make a deep copy of the object
      *
