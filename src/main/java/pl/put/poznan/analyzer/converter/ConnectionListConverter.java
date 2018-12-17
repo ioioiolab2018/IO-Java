@@ -18,7 +18,8 @@ public class ConnectionListConverter implements Converter<String, List<Connectio
     @Override
     public List<Connection> convert(String s) {
         try {
-            return new ObjectMapper().readValue(s, new TypeReference<List<Connection>>(){});
+            return new ObjectMapper().readValue(s, new TypeReference<List<Connection>>() {
+            });
         } catch (IOException e) {
             logger.debug("PROBLEM WITH CONVERSION");
             throw new IllegalArgumentException("Incorrect JSON value!");

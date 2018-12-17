@@ -28,16 +28,16 @@ public class NetworkAnalyzerApplication implements CommandLineRunner {
     public void run(String[] args) throws Exception {
         String protocol = "http";
         logger.info("Application start\n" +
-                "====================================================================================================" +
-                "==================================================================================================\n" +
-                "Application '{}' is running! Information and access URLs:\n\t" +
-                "Name: \t\t{}\n\t"+
-                "Version: \t1.0.1\n\t" +
-                "Local: \t\t{}://localhost:{}\n\t" +
-                "External: \t{}://{}:{}\n\t" +
-                "Date: \t\t" + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()) + "\n" +
-                "====================================================================================================" +
-                "================================================================================================\n\n",
+                        "====================================================================================================" +
+                        "==================================================================================================\n" +
+                        "Application '{}' is running! Information and access URLs:\n\t" +
+                        "Name: \t\t{}\n\t" +
+                        "Version: \t1.0.1\n\t" +
+                        "Local: \t\t{}://localhost:{}\n\t" +
+                        "External: \t{}://{}:{}\n\t" +
+                        "Date: \t\t" + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()) + "\n" +
+                        "====================================================================================================" +
+                        "================================================================================================\n\n",
                 environment.getProperty("spring.application.name"),
                 environment.getProperty("spring.application.name"),
                 protocol,

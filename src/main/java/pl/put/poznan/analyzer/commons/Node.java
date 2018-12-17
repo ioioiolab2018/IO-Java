@@ -33,8 +33,9 @@ public class Node {
 
     /**
      * Class constructor for nodes with connections
-     * @param id node id
-     * @param name optional description of the node
+     *
+     * @param id       node id
+     * @param name     optional description of the node
      * @param nodeType node type can be ENTRY, EXIT or REGULAR
      * @param outgoing list of outgoing connections from the node
      * @param incoming list of incoming connections to the node
@@ -49,8 +50,9 @@ public class Node {
 
     /**
      * Class constructor for nodes without connections
-     * @param id node id
-     * @param name optional description of the node
+     *
+     * @param id       node id
+     * @param name     optional description of the node
      * @param nodeType node type can be ENTRY, EXIT or REGULAR
      */
     public Node(Integer id, String name, NodeType nodeType) {
@@ -62,6 +64,20 @@ public class Node {
     }
 
     // setters getters
+
+    /**
+     * Empty class constructor
+     */
+    public Node() {
+    }
+
+    public Node(int id, String name, NodeType nodeType, List<Connection> outgoing, List<Connection> incoming) {
+        this.id = id;
+        this.name = name;
+        this.nodeType = nodeType;
+        this.outgoing = outgoing;
+        this.incoming = incoming;
+    }
 
     public int getId() {
         return id;
@@ -104,16 +120,11 @@ public class Node {
     }
 
     /**
-     * Empty class constructor
-     */
-    public Node() {
-    }
-
-    /**
      * Override equals method
+     *
      * @param o object to compare with
      * @return TRUE, when objects are identical
-     *      <br>FALSE, when objects are different
+     * <br>FALSE, when objects are different
      */
     @Override
     public boolean equals(Object o) {
@@ -124,8 +135,9 @@ public class Node {
     }
 
     /**
-      * Override hashcode method
-      * @return hash code value for the object
+     * Override hashcode method
+     *
+     * @return hash code value for the object
      */
     @Override
     public int hashCode() {
@@ -134,6 +146,7 @@ public class Node {
 
     /**
      * Override toString method
+     *
      * @return string with all information about the object
      */
     @Override

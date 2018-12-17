@@ -18,7 +18,8 @@ public class NodeListConverter implements Converter<String, List<Node>> {
     @Override
     public List<Node> convert(String s) {
         try {
-            return new ObjectMapper().readValue(s, new TypeReference<List<Node>>(){});
+            return new ObjectMapper().readValue(s, new TypeReference<List<Node>>() {
+            });
         } catch (IOException e) {
             logger.debug("PROBLEM WITH CONVERSION");
             throw new IllegalArgumentException("Incorrect JSON value!");
