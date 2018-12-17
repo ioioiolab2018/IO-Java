@@ -88,31 +88,116 @@ public class Data {
      * <br>FALSE, when the network is invalid
      */
     public static boolean checkNetwork(Map<Integer, Node> nodes) {
-        // Check if there are only one exit and entry
+        // Check if there are only one exit and one  entry
         int entryCount = 0;
         int exitCount = 0;
+
         for (Map.Entry<Integer, Node> entry : nodes.entrySet()) {
             Node checkedNode = entry.getValue();
             if (checkedNode.getNodeType() == NodeType.ENTRY)
                 entryCount += 1;
             if (checkedNode.getNodeType() == NodeType.EXIT)
                 exitCount += 1;
-            if (entryCount > 1 || exitCount > 1) {
-                return false;
-            }
-            // Check validity of id in incoming and outgoing connections
+
+
             for (Connection con : checkedNode.getIncoming()) {
-                if (con.getTo() != checkedNode.getId()) {
-                    return false;
+                if(con.getValue() < 0) {
+                    throw new IllegalStateException("Value of the connection is less than 0");
                 }
+
+                int count=0;
+                for (Connection connection : checkedNode.getIncoming()){
+                    if(connection.isEqual(con)){
+                        count++;
+                    }
+                }
+                if(count > 1){
+                    throw new IllegalStateException("2 or more the same conections");
+                }
+                // Check validity of id in incoming and outgoing connections
+                if (con.getTo() != checkedNode.getId()) {
+                    throw new IllegalStateException("Incorrect connection in Incomming");
+                }
+                // Check connection on opposite
+                if(nodes.get(con.getFrom())==null) {
+                    throw new IllegalStateException("No connection in second node");
+                }
+                else{
+                if (!nodes.get(con.getFrom()).getOutgoing().contains(con)) {
+                    throw new IllegalStateException("No connection in second node");
+                }}
             }
+
             for (Connection con : checkedNode.getOutgoing()) {
+                if(con.getValue() < 0) {
+                    throw new IllegalStateException("Value of the connection is less than 0");
+                }
+                int count=0;
+                for (Connection connection : checkedNode.getOutgoing()){
+                    if(connection.isEqual(con)){
+                        count++;
+                    }
+                }
+                if(count > 1){
+                    throw new IllegalStateException("2 or more the same connections");
+                }
+                // Check validity of id in incoming and outgoing connections
                 if (con.getFrom() != checkedNode.getId()) {
-                    return false;
+                    throw new IllegalStateException("Incorrect connection in Outgoing");
+                }
+                // Check connection on opposite
+                if (nodes.get(con.getTo()) == null) {
+                    throw new IllegalStateException("No connection in second node");
+                } else {
+                    if (!nodes.get(con.getTo()).getIncoming().contains(con)) {
+                        throw new IllegalStateException("No connection in second node");
+                    }
                 }
             }
         }
+
+        if (entryCount == 0) throw new IllegalStateException("There is no entry in network");
+        if (exitCount == 0) throw new IllegalStateException("There is no exit in network");
+        if (entryCount > 1) throw new IllegalStateException("There is more than one entry in network");
+        if (exitCount > 1) throw new IllegalStateException("There is more than one exit in network");
+
+        if (!findPatch(getEnterNode(nodes), nodes, new HashMap<>())) {
+            throw new IllegalStateException("There is no path in network");
+        }
+
         return true;
+    }
+
+    public static boolean findPatch(Node node, Map<Integer, Node> nodes, Map<Integer, Integer> visited) {
+        if (node.getNodeType().equals(NodeType.EXIT)) {
+            return true;
+        }
+        List<Connection> neighbours = node.getOutgoing();
+        for (Connection con : neighbours) {
+            if (!visited.containsKey(con.getTo())) {
+                visited.put(con.getTo(), 1);
+                if (findPatch(nodes.get(con.getTo()), nodes, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Checks validity of the network (when given network is a List),
+     * which consists of:
+     * <br>- checking if there is only one entry node
+     * <br>- checking if there is only one exit node
+     * <br>- checking validity of nodes ids
+     *
+     * @param nodes the network (as a hashMap) to be checked for validity
+     * @return TRUE, when the network is valid
+     * <br>FALSE, when the network is invalid
+     */
+    public static boolean checkNetwork(List<Node> nodes) {
+        return checkNetwork(getNodesMap(nodes));
     }
 
 
@@ -186,51 +271,6 @@ public class Data {
         return null;
     }
 
-    /**
-     * Checks validity of the network (when given network is a list of nodes)
-     * which consists of:
-     * <br>- checking if there is only one entry node
-     * <br>- checking if there is only one exit node
-     * <br>- checking validity of nodes ids
-     *
-     * @param nodes the network (as a list of nodes) to be checked for validity
-     * @return TRUE, when the network is valid
-     * <br>FALSE, when the network is invalid
-     */
-    public static boolean checkNetwork(List<Node> nodes) {
-        //check nodes id
-        // Check if there are only one exit and entry
-        int entryCount = 0;
-        int exitCount = 0;
-        for (Node checkedNode : nodes) {
-            if (checkedNode.getNodeType() == NodeType.ENTRY)
-                entryCount += 1;
-            if (checkedNode.getNodeType() == NodeType.EXIT)
-                exitCount += 1;
-            if (entryCount > 1 || exitCount > 1) {
-                return false;
-            }
-            for (Node node : nodes) {
-                if (!checkedNode.equals(node)) {
-                    if (checkedNode.getId() == node.getId())
-                        return false;
-
-                }
-            }
-            // Check validity of id in incoming and outgoing connections
-            for (Connection con : checkedNode.getIncoming()) {
-                if (con.getTo() != checkedNode.getId()) {
-                    return false;
-                }
-            }
-            for (Connection con : checkedNode.getOutgoing()) {
-                if (con.getFrom() != checkedNode.getId()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     /**
      * Change weighted network to pseudo-not-weighted one. The connections of values greater than 1 are broken
