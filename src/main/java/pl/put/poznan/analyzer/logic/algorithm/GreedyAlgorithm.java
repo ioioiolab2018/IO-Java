@@ -36,7 +36,6 @@ public class GreedyAlgorithm implements Algorithm {
                 }
             }
         }
-        patch.remove(node.getId());
         return false;
     }
 
