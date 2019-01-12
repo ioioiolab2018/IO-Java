@@ -21,8 +21,8 @@ public class GreedyAlgorithm implements Algorithm {
 
     private boolean greedy(Node node) {
         ArrayList<Connection> sorted = new ArrayList(node.getOutgoing());
-
         sorted.sort((Connection o1, Connection o2) -> (int) (o1.getValue() - o2.getValue()));
+
         for (Connection con : sorted) {
             patch.add(con);
             Node nextNode = nodeMap.get(con.getTo());
@@ -40,9 +40,8 @@ public class GreedyAlgorithm implements Algorithm {
     }
 
     /**
-     * Find the most profitable path by using BFS algorithm.
-     * <br> Method uses pseudo-not-weighted network (made from original network) where every connection value is
-     * interpreted as 1, so the method searches for the shortest path.
+     * Find the most profitable path by using greedy algorithm.
+     * <br> The method searches for the shortest path.
      *
      * @param nodesList network (list of nodes) in which you want to find the most profitable path
      * @return the most profitable path as Result (list of nodes and path's value)
@@ -56,7 +55,6 @@ public class GreedyAlgorithm implements Algorithm {
         boolean resultOk = greedy(start);
 
         if (resultOk) {
-            logger.debug("The operation of the algorithm has been completed");
             float sum=0;
             ArrayList<Integer> resultPatch= new ArrayList<>();
             resultPatch.add(start.getId());
@@ -64,6 +62,7 @@ public class GreedyAlgorithm implements Algorithm {
                 sum+=con.getValue();
                 resultPatch.add(con.getTo());
             }
+            logger.debug("The operation of the algorithm has been completed");
             return   new Result(sum, resultPatch);
         } else
             return null;
