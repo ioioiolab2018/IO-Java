@@ -59,8 +59,8 @@ public class Node {
         this.id = id;
         this.name = name;
         this.nodeType = nodeType;
-        this.outgoing = new ArrayList<>();
         this.incoming = new ArrayList<>();
+        this.outgoing = new ArrayList<>();
     }
 
     // setters getters
@@ -69,14 +69,8 @@ public class Node {
      * Empty class constructor
      */
     public Node() {
-    }
-
-    public Node(int id, String name, NodeType nodeType, List<Connection> outgoing, List<Connection> incoming) {
-        this.id = id;
-        this.name = name;
-        this.nodeType = nodeType;
-        this.outgoing = outgoing;
-        this.incoming = incoming;
+        this.incoming = new ArrayList<>();
+        this.outgoing = new ArrayList<>();
     }
 
     public int getId() {
