@@ -1,15 +1,14 @@
 package pl.put.poznan.analyzer.logic;
 
-import javafx.scene.control.Tab;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.put.poznan.analyzer.commons.Network;
-import pl.put.poznan.analyzer.commons.Node;
 import pl.put.poznan.analyzer.logic.algorithm.BFS;
 import pl.put.poznan.analyzer.logic.algorithm.DFS;
 import pl.put.poznan.analyzer.logic.algorithm.GreedyAlgorithm;
 import pl.put.poznan.analyzer.repositories.NetworkRepository;
 
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,7 +18,7 @@ class NetworkAnalyzerTest {
     private NetworkAnalyzer networkAnalyzer;
     private BFS bfsMock;
     private DFS dfsMock;
-    private NetworkOperations networkOperationsMock;
+    private NetworkOperations networkOperations;
     private GreedyAlgorithm greedyAlgorithmMock;
     private NetworkRepository networkRepositoryMock;
     private PathFinder pathFinderMock;
@@ -28,46 +27,47 @@ class NetworkAnalyzerTest {
     void setUp() {
         bfsMock = mock(BFS.class);
         dfsMock = mock(DFS.class);
-        networkOperationsMock = mock(NetworkOperations.class);
         pathFinderMock = mock(PathFinder.class);
         greedyAlgorithmMock = mock(GreedyAlgorithm.class);
         networkRepositoryMock = mock(NetworkRepository.class);
-        networkAnalyzer=new  NetworkAnalyzer(bfsMock,  dfsMock, networkRepositoryMock, networkOperationsMock,  pathFinderMock, greedyAlgorithmMock);
+        networkOperations = mock(NetworkOperations.class);
+        networkAnalyzer = new NetworkAnalyzer(bfsMock, dfsMock, networkRepositoryMock, networkOperations,
+                pathFinderMock, greedyAlgorithmMock);
     }
 
     @Test
     void findTheBestPathByBFS() {
-        networkAnalyzer.findTheBestPathByBFS(anyList());
-        verify(pathFinderMock).setAlgorithm(bfsMock);
-        verify(pathFinderMock).findPath(anyList());
+        networkAnalyzer.findTheBestPathByBFS(any());
+        verify(pathFinderMock, times(1)).setAlgorithm(bfsMock);
+        verify(pathFinderMock, times(1)).findPath(any());
     }
 
     @Test
     void findTheBestPathByDFS() {
-        networkAnalyzer.findTheBestPathByDFS(anyList());
-        verify(pathFinderMock).setAlgorithm(dfsMock);
-        verify(pathFinderMock).findPath(anyList());
+        networkAnalyzer.findTheBestPathByDFS(any());
+        verify(pathFinderMock, times(1)).setAlgorithm(dfsMock);
+        verify(pathFinderMock, times(1)).findPath(any());
     }
 
     @Test
     void findTheBestPathByGreedy() {
-        networkAnalyzer.findTheBestPathByGreedy(anyList());
+        networkAnalyzer.findTheBestPathByGreedy(any());
         verify(pathFinderMock).setAlgorithm(greedyAlgorithmMock);
-        verify(pathFinderMock).findPath(anyList());
+        verify(pathFinderMock).findPath(any());
     }
 
     @Test
     void saveNetworkOnDatabase() {
         String nodes = "{}";
-        assertEquals(0,networkAnalyzer.saveNetworkOnDatabase(nodes));
-        verify(networkRepositoryMock).save(any(Network.class));
-
+        networkAnalyzer.saveNetworkOnDatabase(nodes);
+        assertEquals(0, networkAnalyzer.saveNetworkOnDatabase(nodes));
+        verify(networkRepositoryMock, times(1)).save(any(Network.class));
     }
 
     @Test
     void getNetwork() {
-        int correctId =10;
-        int incorrectId =-1;
+        int correctId = 10;
+        int incorrectId = -1;
         Network networkMock = mock(Network.class);
 
         when(networkMock.getJsonValue()).thenReturn("json");
@@ -79,7 +79,7 @@ class NetworkAnalyzerTest {
         verify(networkRepositoryMock).findOne(correctId);
         verify(networkMock).getJsonValue();
 
-        assertAll(() ->  assertEquals(networkAnalyzer.getNetwork(correctId), "json") ,
+        assertAll(() -> assertEquals(networkAnalyzer.getNetwork(correctId), "json"),
                 () -> assertThrows(IllegalArgumentException.class, () -> networkAnalyzer.getNetwork(incorrectId)));
 
     }
@@ -87,22 +87,46 @@ class NetworkAnalyzerTest {
     @Test
     void deleteNetworkFromDatabase() {
         networkAnalyzer.deleteNetworkFromDatabase(10);
-        verify(networkRepositoryMock).delete(10);
+        verify(networkRepositoryMock, times(1)).delete(10);
     }
 
     @Test
     void addNodesToNetwork() {
+        // given
+        when(networkOperations.addNodesToNetwork(any(), any())).thenReturn(new ArrayList<>());
+        // when
+        networkAnalyzer.addNodesToNetwork(1, new ArrayList<>());
+        // then
+        verify(networkOperations, times(1)).addNodesToNetwork(any(), any());
     }
 
     @Test
     void addConnectionsToNetwork() {
+        // given
+        when(networkOperations.addConnectionsToNetwork(any(), any())).thenReturn(new ArrayList<>());
+        // when
+        networkAnalyzer.addConnectionsToNetwork(1, new ArrayList<>());
+        // then
+        verify(networkOperations, times(1)).addConnectionsToNetwork(any(), any());
     }
 
     @Test
     void deleteNodesFromNetwork() {
+        // given
+        when(networkOperations.deleteNodesFromNetwork(any(), any())).thenReturn(new ArrayList<>());
+        // when
+        networkAnalyzer.deleteNodesFromNetwork(1, new ArrayList<>());
+        // then
+        verify(networkOperations, times(1)).deleteNodesFromNetwork(any(), any());
     }
 
     @Test
     void deleteConnectionsFromNetwork() {
+        // given
+        when(networkOperations.deleteConnectionsFromNetwork(any(), any())).thenReturn(new ArrayList<>());
+        // when
+        networkAnalyzer.deleteConnectionsFromNetwork(1, new ArrayList<>());
+        // then
+        verify(networkOperations, times(1)).deleteConnectionsFromNetwork(any(), any());
     }
 }
