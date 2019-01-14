@@ -55,6 +55,25 @@ class NetworkOperationsTest {
 
     @Test
     void addConnectionsToNetwork() {
+        // given
+        List<Node> nodeList = Arrays.asList(
+                new Node(1, "1", NodeType.ENTRY, Collections.singletonList(new Connection(1, 2, 1)), new ArrayList<>()),
+                new Node(2, "2", NodeType.REGULAR, Collections.singletonList(new Connection(2, 3, 1)),
+                        Collections.singletonList(new Connection(1, 2, 1))),
+                new Node(3, "3", NodeType.EXIT, new ArrayList<>(), Collections.singletonList(new Connection(2, 3, 1))));
+        when(nodeListConverter.convert(any())).thenReturn(nodeList);
+        when(networkRepository.findOne(any())).thenReturn(new Network());
+
+        // when
+        List<Node> result = networkOperations.addConnectionsToNetwork(1, Collections.singletonList(
+                new Connection(1, 3, 2)
+        ));
+
+        // then
+        verify(networkRepository, times(1)).findOne(any());
+        verify(nodeListConverter, times(1)).convert(any());
+        assertAll(() -> assertEquals(3, result.size()),
+                () -> assertEquals(2, result.get(0).getOutgoing().get(1).getValue()));
     }
 
     @Test
@@ -84,5 +103,26 @@ class NetworkOperationsTest {
 
     @Test
     void deleteConnectionsFromNetwork() {
+        // given
+        List<Node> nodeList = Arrays.asList(
+                new Node(1, "1", NodeType.ENTRY, Arrays.asList(new Connection(1, 2, 1),
+                        new Connection(1, 3, 2)), new ArrayList<>()),
+                new Node(2, "2", NodeType.REGULAR, Collections.singletonList(new Connection(2, 3, 1)),
+                        Collections.singletonList(new Connection(1, 2, 1))),
+                new Node(3, "3", NodeType.EXIT, new ArrayList<>(), Arrays.asList(new Connection(2, 3, 1),
+                        new Connection(1, 3, 2))));
+        when(nodeListConverter.convert(any())).thenReturn(nodeList);
+        when(networkRepository.findOne(any())).thenReturn(new Network());
+
+        // when
+        List<Node> result = networkOperations.deleteConnectionsFromNetwork(1, Collections.singletonList(
+                new Connection(1, 3, 2)
+        ));
+
+        // then
+        verify(networkRepository, times(1)).findOne(any());
+        verify(nodeListConverter, times(1)).convert(any());
+        assertAll(() -> assertEquals(3, result.size()),
+                () -> assertEquals(1, result.get(0).getOutgoing().size()));
     }
 }
