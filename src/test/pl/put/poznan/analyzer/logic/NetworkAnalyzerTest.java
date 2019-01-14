@@ -59,8 +59,8 @@ class NetworkAnalyzerTest {
     @Test
     void saveNetworkOnDatabase() {
         String nodes = "{}";
+        when(networkRepositoryMock.save(any(Network.class))).thenReturn(new Network());
         networkAnalyzer.saveNetworkOnDatabase(nodes);
-        assertEquals(0, networkAnalyzer.saveNetworkOnDatabase(nodes));
         verify(networkRepositoryMock, times(1)).save(any(Network.class));
     }
 
@@ -86,18 +86,9 @@ class NetworkAnalyzerTest {
 
     @Test
     void deleteNetworkFromDatabase() {
+        doNothing().when(networkRepositoryMock).delete(any(Network.class));
         networkAnalyzer.deleteNetworkFromDatabase(10);
         verify(networkRepositoryMock, times(1)).delete(10);
-    }
-
-    @Test
-    void addNodesToNetwork() {
-        // given
-        when(networkOperations.addNodesToNetwork(any(), any())).thenReturn(new ArrayList<>());
-        // when
-        networkAnalyzer.addNodesToNetwork(1, new ArrayList<>());
-        // then
-        verify(networkOperations, times(1)).addNodesToNetwork(any(), any());
     }
 
     @Test
@@ -108,25 +99,5 @@ class NetworkAnalyzerTest {
         networkAnalyzer.addConnectionsToNetwork(1, new ArrayList<>());
         // then
         verify(networkOperations, times(1)).addConnectionsToNetwork(any(), any());
-    }
-
-    @Test
-    void deleteNodesFromNetwork() {
-        // given
-        when(networkOperations.deleteNodesFromNetwork(any(), any())).thenReturn(new ArrayList<>());
-        // when
-        networkAnalyzer.deleteNodesFromNetwork(1, new ArrayList<>());
-        // then
-        verify(networkOperations, times(1)).deleteNodesFromNetwork(any(), any());
-    }
-
-    @Test
-    void deleteConnectionsFromNetwork() {
-        // given
-        when(networkOperations.deleteConnectionsFromNetwork(any(), any())).thenReturn(new ArrayList<>());
-        // when
-        networkAnalyzer.deleteConnectionsFromNetwork(1, new ArrayList<>());
-        // then
-        verify(networkOperations, times(1)).deleteConnectionsFromNetwork(any(), any());
     }
 }
