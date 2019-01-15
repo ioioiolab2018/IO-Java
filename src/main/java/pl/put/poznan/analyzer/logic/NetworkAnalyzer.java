@@ -24,6 +24,10 @@ public class NetworkAnalyzer {
      * Instance of DFS class, which is used to find the best path in network using DFS algorithm
      */
     private final Algorithm dfs;
+    /**
+     * Instance of GreedyAlgorithm class, which is used to find the best path in network using greedy algorithm
+     */
+    private final Algorithm greedy;
 
     private final NetworkRepository networkRepository;
 
@@ -36,11 +40,13 @@ public class NetworkAnalyzer {
      *
      * @param bfs instance of BFS to be used in program
      * @param dfs instance of DFS to be used in program
+     * @param greedy instance of GreedyAlgorithm to be used in program
      */
     @Autowired
-    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkRepository, NetworkOperations networkOperations, PathFinder pathFinder) {
+    public NetworkAnalyzer(BFS bfs, DFS dfs, NetworkRepository networkRepository, NetworkOperations networkOperations, PathFinder pathFinder, GreedyAlgorithm greedy) {
         this.bfs = bfs;
         this.dfs = dfs;
+        this.greedy = greedy;
         this.networkRepository = networkRepository;
         this.networkOperations = networkOperations;
         this.pathFinder = pathFinder;
@@ -67,6 +73,18 @@ public class NetworkAnalyzer {
      */
     public Result findTheBestPathByDFS(List<Node> nodeList) {
         pathFinder.setAlgorithm(dfs);
+        return pathFinder.findPath(nodeList);
+    }
+
+    /**
+     * Find the most profitable path in the network by greedy algorithm
+     *
+     * @param nodeList network (list of nodes) in which you want to find the best path
+     * @return the best path as Result (list of nodes and path's value)
+     * <br> or NULL if path can't be found
+     */
+    public Result findTheBestPathByGreedy(List<Node> nodeList) {
+        pathFinder.setAlgorithm(greedy);
         return pathFinder.findPath(nodeList);
     }
 

@@ -39,6 +39,13 @@ public class NetworkAnalyzerController {
         return networkAnalyzer.findTheBestPathByDFS(nodes);
     }
 
+    @RequestMapping(path = "/greedy/nodes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Result findTheBestPathByGreedy(@RequestBody List<Node> nodes) {
+        logger.debug(String.valueOf(nodes));
+        return networkAnalyzer.findTheBestPathByGreedy(nodes);
+    }
+
     @RequestMapping(path = "/saveNetwork", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public int saveNetwork(@RequestBody String nodesJson) {
