@@ -16,9 +16,9 @@ Dodać do pom.xml zalezność:
 ```
 oraz usunąć ustawienia z pliku "aplication.properties" (wszystko oprócz 2 pierwszych lini).
 
-Projekt najlepiej utruchamiać i budowac w programie IntelliJ, Java 8
+Projekt najlepiej utruchamiać i budować w programie IntelliJ, Java 8
 
-## Działające funckje: 
+## Działające funkcje: 
 Wyszukanie najkrótszej ścieżki:
 * Algorytm BFS
 ```
